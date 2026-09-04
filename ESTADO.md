@@ -5,20 +5,25 @@ Site estático (sem build) com duas linhas criativas: **emoção** (polaroides) 
 
 ## Retomar por aqui
 
-Decidir **onde a landing vai morar na Vercel**. Três opções levantadas em
-2026-09-04, nenhuma executada ainda:
+Repo no ar: **https://github.com/betoalvim/notecar-lp** (branch `main`, commit
+inicial em 2026-09-04). Falta **importar na Vercel**. Caminho escolhido: opção C
+— projeto proprio, subdominio separado do app.
 
-- **C (recomendada)** — projeto Vercel separado, `notecar-lp.vercel.app`. Zero
-  toque no app. Só `cd site && vercel --prod`.
-- **B** — mesmo domínio do app, em `/lp`. Exige `rewrites` no `vercel.json` do
-  projeto do app (ou `next.config.js` se for Next). Antes disso, **remover
-  `cleanUrls: true` de `site/vercel.json`**: o redirect `/emocao.html` →
-  `/emocao` atravessa o proxy e vaza o domínio de trás.
-- **A** — copiar `site/` pra `public/lp/` do app. Mais simples, mas cada ajuste
-  de landing vira redeploy do app.
+No vercel.com/new, importando `betoalvim/notecar-lp`:
 
-Nada foi publicado. Não existe conta/projeto Vercel criado pra esta pasta até onde
-se verificou.
+- Framework Preset: **Other**
+- **Root Directory: `site`**  ← o unico campo que nao e default
+- Build Command: vazio · Output Directory: `.`
+- Nome do projeto define o subdominio (`notecar-lp` -> `notecar-lp.vercel.app`)
+
+As outras duas opcoes, se um dia o `/lp` no dominio do app virar exigencia:
+
+- **B** — `rewrites` no `vercel.json` do projeto do app (ou `next.config.js` se
+  for Next) apontando `/lp/:path*` para o deploy da landing. Antes disso,
+  **remover `cleanUrls: true` de `site/vercel.json`**: o redirect
+  `/emocao.html` -> `/emocao` atravessa o proxy e vaza o dominio de tras.
+- **A** — copiar `site/` para `public/lp/` do app. Cada ajuste de landing vira
+  redeploy do app.
 
 ## Pronto
 
@@ -54,6 +59,8 @@ Originais intactos na raiz (`notecar-*.html`). `site/_to_delete/` é descarte.
 - `notecar-palco-v3.html` (origem da landing emoção) tem ~1 MB. Peso não foi
   auditado depois da cópia pra `site/`. Provável imagem embutida em base64.
 - Nenhum teste de deploy real feito. `vercel.json` nunca rodou na Vercel.
+- `teste-stage.html` (25 bytes) foi versionado junto. Lixo, apagar.
+- `site/_to_delete/` esta no `.gitignore`, entao nao subiu — mas continua no disco.
 - Fluxo de CTA foi corrigido no papel (ver `LEIA-ME.md`), mas não clicado ponta
   a ponta em navegador.
 - Não há analytics, favicon, meta OG ou title revisado — landing pública sem
