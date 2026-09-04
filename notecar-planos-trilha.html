@@ -1,0 +1,991 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Notecar — planos e assinatura</title>
+<meta name="description" content="Escolha como você quer cuidar dos seus veículos. Comece grátis ou tenha mais veículos, mais recursos e uma experiência sem anúncios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Glory:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playpen+Sans:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   Notecar — página de planos · conceito trilha (estrada + carro)
+   Design system herdado de notecar-6-blocos / trilha em perspectiva
+   ============================================================ */
+
+:root{
+  --navy:#102A43; --navy2:#1B3A57; --navy-dk:#0D1C2B;
+  --teal-dk:#0E6474; --teal:#0B9EA5; --teal-md:#46B5BA; --teal-lt:#80CBCF; --teal-pl:#BAE1E4;
+  --laranja:#E8503A; --laranja-dk:#C0402C; --laranja-pl:#FBDDD7;
+  --ambar:#D9A22B; --ambar-dk:#8A6A1F; --ambar-pl:#F6E7C8;
+  --surf:#F4F7F8; --surf2:#E4EAEE;
+  --cinza:#34434E; --cinza2:#7B8894;
+  --ceu-1:#7FB4D8; --ceu-2:#BBD9E8; --ceu-3:#E6F0F4;
+  --d:'Glory',system-ui,-apple-system,sans-serif;
+  --m:'JetBrains Mono',ui-monospace,monospace;
+  --p:'Playpen Sans',cursive;
+  --e:cubic-bezier(.4,0,.2,1);
+  --vidro:linear-gradient(160deg,rgba(255,255,255,.82),rgba(244,247,248,.64));
+  --vidro-solido:linear-gradient(180deg,rgba(255,255,255,.95),rgba(244,247,248,.88));
+  --bd-vidro:1px solid rgba(255,255,255,.80);
+  --sh-vidro:0 16px 40px rgba(16,42,67,.20), inset 0 1px 0 rgba(255,255,255,.9);
+  --sh-card:0 12px 30px rgba(16,42,67,.16), inset 0 1px 0 rgba(255,255,255,.9);
+  --sh-alto:0 26px 56px rgba(16,42,67,.26), inset 0 1px 0 rgba(255,255,255,.95);
+  --sh-cta:0 10px 24px rgba(232,80,58,.38);
+  --r-painel:22px 11px 22px 11px;
+  --r-card:16px 8px 16px 8px;
+  --wrap:1120px;
+  --sec:clamp(50px,8vw,92px);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none !important}
+html{scroll-behavior:smooth}
+
+body{
+  font-family:var(--d);font-size:16px;line-height:1.45;color:var(--navy);
+  background:var(--surf);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+
+.wrap{position:relative;z-index:2;width:100%;max-width:var(--wrap);margin:0 auto;padding:0 clamp(16px,4.6vw,30px)}
+
+/* ---------- cena: céu + estrada ---------- */
+
+.cena{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
+.cena svg{width:100%;height:100%;display:block}
+.carro-grp{transform-box:view-box;transform-origin:600px 479px}
+@media(max-width:960px){.carro-grp{transform:scale(.66)}}
+@media(max-width:430px){.carro-grp{transform:scale(.62)}}
+
+.hero{
+  position:relative;isolation:isolate;
+  min-height:clamp(520px,76vh,660px);
+  display:flex;align-items:flex-start;
+  padding:clamp(78px,15vw,112px) 0 clamp(130px,22vw,190px);
+  overflow:hidden;
+}
+.hero::after{ /* transição da cena para a superfície da página */
+  content:'';position:absolute;left:0;right:0;bottom:0;height:86px;z-index:1;
+  background:linear-gradient(rgba(244,247,248,0),var(--surf));pointer-events:none;
+}
+
+.fecho{
+  position:relative;isolation:isolate;overflow:hidden;
+  margin-top:var(--sec);padding:clamp(64px,11vw,104px) 0 clamp(96px,17vw,160px);
+}
+.fecho::before{
+  content:'';position:absolute;left:0;right:0;top:0;height:90px;z-index:1;
+  background:linear-gradient(var(--surf),rgba(230,240,244,0));pointer-events:none;
+}
+.fecho::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:96px;z-index:1;
+  background:linear-gradient(rgba(244,247,248,0),var(--surf));pointer-events:none;
+}
+
+/* ---------- topo ---------- */
+
+.topo{
+  position:absolute;left:0;right:0;top:0;z-index:5;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:16px clamp(16px,4.6vw,30px) 0;max-width:var(--wrap);margin:0 auto;
+}
+.topo .lg{width:clamp(116px,29vw,150px);height:auto;display:block;filter:drop-shadow(0 2px 6px rgba(255,255,255,.6))}
+.topo .volta{
+  font-family:var(--m);font-size:9.5px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--navy);opacity:.72;text-decoration:none;white-space:nowrap;
+  background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-radius:99px;padding:7px 12px;transition:opacity .2s var(--e),color .2s var(--e);
+}
+.topo .volta:hover{opacity:1;color:var(--teal-dk)}
+.topo .volta .lgx{display:none}
+@media(min-width:520px){.topo .volta .sm{display:none}.topo .volta .lgx{display:inline}}
+
+/* ---------- painéis de vidro ---------- */
+
+.painel{
+  position:relative;z-index:2;
+  background:var(--vidro);border:var(--bd-vidro);box-shadow:var(--sh-vidro);
+  backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);
+  border-radius:var(--r-painel);
+  padding:clamp(22px,5vw,34px) clamp(20px,5vw,38px) clamp(24px,5vw,34px);
+}
+.painel.centro{text-align:center;max-width:640px;margin:0 auto}
+
+.rot{font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--cinza2)}
+.h1{
+  margin-top:12px;font-weight:700;font-size:clamp(26px,6.6vw,44px);line-height:1.13;
+  letter-spacing:-.022em;color:var(--navy);
+}
+.lead{margin-top:13px;font-size:clamp(14.5px,3.4vw,17.5px);line-height:1.45;color:rgba(52,67,78,.9);max-width:44ch}
+.painel.centro .lead{margin-left:auto;margin-right:auto}
+.mn{
+  margin-top:16px;font-family:var(--m);font-size:9.5px;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--navy);opacity:.8;line-height:1.7;
+}
+.mn b{color:var(--teal-dk);font-weight:700;opacity:1}
+.dz{font-family:var(--p);font-weight:700;color:var(--teal-dk);letter-spacing:-.02em;line-height:1.06}
+
+.h2{font-weight:700;font-size:clamp(20px,4.2vw,31px);line-height:1.18;letter-spacing:-.02em;color:var(--navy)}
+
+/* ---------- seletor de cobrança ---------- */
+
+.cobranca{
+  position:relative;z-index:3;margin:clamp(-26px,-4vw,-18px) auto 0;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;
+}
+.seg{
+  position:relative;display:inline-flex;padding:4px;border-radius:99px;
+  background:var(--vidro-solido);border:var(--bd-vidro);box-shadow:var(--sh-card);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.seg .knob{
+  position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:99px;
+  background:linear-gradient(180deg,var(--navy2),var(--navy-dk));
+  box-shadow:0 6px 14px rgba(16,42,67,.30);
+  transition:transform .36s var(--e), width .36s var(--e);
+}
+.seg button{
+  position:relative;z-index:1;border:0;background:none;cursor:pointer;
+  font-family:var(--d);font-weight:600;font-size:14px;color:var(--cinza);
+  padding:10px 21px;border-radius:99px;transition:color .3s var(--e);
+}
+.seg button[aria-checked="true"]{color:#fff}
+.eco{
+  font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ambar-dk);background:var(--ambar-pl);border-radius:99px;padding:8px 12px;
+  border:1px solid rgba(217,162,43,.28);transition:opacity .3s var(--e);
+}
+.eco.dim{opacity:.42}
+
+/* ---------- fichas de plano ---------- */
+
+.planos{margin-top:clamp(26px,5vw,38px);display:grid;gap:22px;grid-template-columns:1fr}
+@media(min-width:640px) and (max-width:959px){.planos{max-width:480px;margin-left:auto;margin-right:auto}}
+@media(min-width:960px){.planos{grid-template-columns:repeat(3,1fr);gap:18px;align-items:start}}
+
+.ficha{
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--vidro-solido);border:var(--bd-vidro);box-shadow:var(--sh-card);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-radius:var(--r-card);cursor:pointer;
+  transition:transform .3s var(--e), box-shadow .3s var(--e);
+}
+.ficha:hover{transform:translateY(-3px);box-shadow:var(--sh-alto)}
+.ficha.rec{box-shadow:var(--sh-alto), 0 0 0 1.5px rgba(11,158,165,.35)}
+.ficha.sel{box-shadow:var(--sh-alto), 0 0 0 2px var(--teal)}
+@media(min-width:960px){
+  .ficha.rec{transform:translateY(-12px)}
+  .ficha.rec:hover{transform:translateY(-15px)}
+}
+
+/* cabeçalho da ficha */
+.cab{
+  display:flex;align-items:center;gap:10px;
+  padding:13px clamp(15px,3.6vw,19px);color:#fff;
+  background:linear-gradient(180deg,var(--navy2),var(--navy-dk));
+}
+.ficha.free .cab{background:linear-gradient(180deg,#7B8894,#54636F)}
+.ficha.rec  .cab{background:linear-gradient(180deg,#0E6474,#0A2C39)}
+.cab h3{font-size:14.5px;font-weight:800;letter-spacing:.01em;line-height:1.1}
+.cab i{
+  display:block;margin-top:3px;font-style:normal;font-family:var(--m);
+  font-size:8.5px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--teal-lt);
+}
+.ficha.free .cab i{color:rgba(255,255,255,.72)}
+.selo{
+  margin-left:auto;flex:0 0 auto;
+  font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--laranja);color:#fff;border-radius:99px;padding:5px 10px;
+  box-shadow:0 6px 14px rgba(232,80,58,.42);
+}
+
+/* corpo da ficha */
+.corpo{display:flex;flex-direction:column;flex:1;padding:clamp(16px,3.8vw,20px) clamp(15px,3.6vw,19px) clamp(17px,3.8vw,20px)}
+.preco{display:flex;align-items:baseline;gap:5px;color:var(--navy)}
+.preco .cur{font-family:var(--m);font-size:13px;font-weight:500;color:var(--cinza2);transform:translateY(-3px)}
+.preco .val{font-weight:800;font-size:clamp(34px,8.6vw,40px);line-height:.95;letter-spacing:-.035em}
+.preco .per{font-size:13.5px;font-weight:500;color:var(--cinza)}
+.eqv{margin-top:7px;font-size:12.5px;line-height:1.3;color:var(--cinza);min-height:17px}
+.eqv b{font-weight:700;color:var(--teal-dk)}
+.troca{animation:troca .42s var(--e) both}
+@keyframes troca{from{opacity:0;filter:blur(5px);transform:translateY(7px)}to{opacity:1;filter:blur(0);transform:none}}
+
+.desc{margin-top:12px;font-size:13.5px;line-height:1.4;color:var(--cinza)}
+.chapeu{
+  margin-top:15px;font-family:var(--m);font-size:8.5px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--cinza2);
+}
+.linhas{margin-top:8px;flex:1}
+.l{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+  padding:7px 0;border-top:1px solid rgba(52,67,78,.11);
+  font-size:13px;line-height:1.32;color:var(--navy);
+}
+.l:first-child{border-top:none}
+.l b{font-family:var(--m);font-size:11px;font-weight:500;color:var(--teal);flex:0 0 auto;line-height:1.5}
+.l.nota{color:var(--cinza2);font-size:12.5px}
+.bd{
+  display:inline-block;font-family:var(--m);font-size:8px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;border-radius:99px;padding:3px 8px;white-space:nowrap;
+}
+.bd.i{background:var(--surf2);color:var(--cinza)}
+.bd.c{background:var(--teal-pl);color:var(--teal-dk)}
+.mini{margin-top:11px;font-size:11.5px;line-height:1.35;color:var(--cinza2)}
+
+/* ---------- botões ---------- */
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--d);font-weight:700;font-size:14.5px;
+  border:0;border-radius:99px;padding:14px 24px;cursor:pointer;text-decoration:none;
+  transition:transform .18s var(--e), box-shadow .22s var(--e), background-color .22s var(--e);
+}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--laranja);color:#fff;box-shadow:var(--sh-cta)}
+.btn.pri:hover{background:var(--laranja-dk);box-shadow:0 14px 30px rgba(232,80,58,.5)}
+.btn.sec{background:rgba(255,255,255,.72);color:var(--navy);box-shadow:inset 0 0 0 1.5px rgba(16,42,67,.22)}
+.btn.sec:hover{background:#fff;box-shadow:inset 0 0 0 1.5px rgba(16,42,67,.45)}
+.btn.bloco{width:100%;margin-top:16px}
+
+/* ---------- comparação ---------- */
+
+.quadro{
+  margin-top:var(--sec);overflow:hidden;border-radius:var(--r-card);
+  background:var(--vidro-solido);border:var(--bd-vidro);box-shadow:var(--sh-card);
+}
+.quadro .cab{background:linear-gradient(180deg,var(--navy2),var(--navy-dk))}
+.quadro .cab h3{font-size:13px}
+.quadro .cab i{color:var(--teal-lt)}
+.tab-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:clamp(6px,2vw,14px) clamp(12px,3.4vw,20px) clamp(12px,3vw,18px)}
+table.cmp{width:100%;min-width:288px;border-collapse:collapse;table-layout:fixed}
+table.cmp col.lab{width:36%}
+table.cmp col.pl{width:21.3%}
+table.cmp th,table.cmp td{padding:10px 5px;text-align:center;font-size:12.5px;line-height:1.3;border-top:1px solid rgba(52,67,78,.11)}
+table.cmp thead th{
+  border-top:none;font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--cinza2);padding-bottom:9px;
+}
+table.cmp thead th.p{color:var(--teal-dk)}
+table.cmp tbody th{text-align:left;font-weight:500;font-size:12.5px;color:var(--cinza);padding-left:0}
+table.cmp td.p{background:rgba(11,158,165,.055)}
+table.cmp td.v{font-family:var(--m);font-size:11.5px;font-weight:500}
+.sim{font-family:var(--m);color:var(--teal);font-size:12px}
+.nao{color:var(--cinza2)}
+
+/* ---------- reforço de valor ---------- */
+
+.valor{
+  position:relative;overflow:hidden;margin-top:var(--sec);
+  border-radius:var(--r-painel);color:#EAF2F3;
+  background:linear-gradient(165deg,var(--navy2),var(--navy-dk) 62%,#081521);
+  box-shadow:0 24px 56px rgba(16,42,67,.34);
+  padding:clamp(28px,6vw,54px) clamp(22px,5vw,48px);
+}
+.valor::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(94% 60% at 50% 0%, rgba(128,203,207,.18), rgba(0,0,0,0) 70%);
+}
+.valor > *{position:relative}
+.valor .h2{color:#F2F8F9;max-width:24ch}
+.valor .lead{color:#A9BCC2;max-width:56ch}
+.pilares{margin-top:clamp(22px,4.4vw,34px);display:grid;gap:0;grid-template-columns:1fr}
+.pilar{padding:15px 0;border-top:1px solid rgba(234,242,243,.16)}
+.pilar h3{font-family:var(--m);font-size:9.5px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--teal-lt)}
+.pilar p{margin-top:6px;font-size:14px;line-height:1.4;color:#CFDDE1;max-width:30ch}
+@media(min-width:720px){.pilares{grid-template-columns:repeat(3,1fr);gap:22px}.pilar{padding:16px 0 0}}
+
+/* ---------- garantias ---------- */
+
+.garantias{margin-top:clamp(22px,4vw,32px);display:flex;flex-wrap:wrap;gap:8px;justify-content:center;list-style:none}
+.garantias li{
+  font-family:var(--m);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--cinza);background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.8);
+  box-shadow:0 6px 16px rgba(16,42,67,.10);border-radius:99px;padding:8px 13px;
+}
+.garantias li::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--teal-md);margin-right:7px;vertical-align:middle}
+
+/* ---------- FAQ ---------- */
+
+.faq{margin-top:var(--sec);max-width:780px}
+.faq-lista{margin-top:14px;border-radius:var(--r-card);overflow:hidden;background:var(--vidro-solido);border:var(--bd-vidro);box-shadow:var(--sh-card)}
+.faq-item + .faq-item{border-top:1px solid rgba(52,67,78,.11)}
+.faq-q{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:none;border:0;cursor:pointer;text-align:left;
+  padding:16px clamp(15px,3.6vw,20px);
+  font-family:var(--d);font-weight:600;font-size:15px;line-height:1.3;color:var(--navy);
+  transition:color .2s var(--e);
+}
+.faq-q:hover{color:var(--teal-dk)}
+.faq-q .pm{position:relative;flex:0 0 13px;height:13px}
+.faq-q .pm::before,.faq-q .pm::after{
+  content:'';position:absolute;left:0;top:6px;width:13px;height:1.5px;background:var(--cinza2);
+  transition:transform .3s var(--e), background-color .2s var(--e);
+}
+.faq-q .pm::after{transform:rotate(90deg)}
+.faq-q[aria-expanded="true"] .pm::before,.faq-q[aria-expanded="true"] .pm::after{background:var(--teal)}
+.faq-q[aria-expanded="true"] .pm::after{transform:rotate(0)}
+.faq-a{height:0;overflow:hidden;transition:height .34s var(--e)}
+.faq-a p{padding:0 clamp(15px,3.6vw,20px) 17px;font-size:14px;line-height:1.5;color:var(--cinza);max-width:64ch}
+
+/* ---------- fecho ---------- */
+
+.fecho .painel{max-width:680px;margin:0 auto;text-align:center}
+.fecho .acoes{margin-top:clamp(20px,4vw,28px);display:flex;flex-wrap:wrap;gap:11px;justify-content:center}
+.fecho .acoes .btn{min-width:200px}
+.fecho .acoes .btn.pri{font-size:15.5px;padding:16px 28px}
+.fecho .dz{margin-top:clamp(18px,3.6vw,26px);font-size:clamp(19px,4.6vw,26px)}
+.rodape{position:relative;z-index:2;padding:clamp(26px,5vw,40px) 0 calc(92px + env(safe-area-inset-bottom));text-align:center}
+.rodape .simb{width:32px;height:auto;margin:0 auto;display:block;opacity:.5}
+.rodape p{margin-top:10px;font-family:var(--m);font-size:9px;font-weight:600;letter-spacing:.17em;text-transform:uppercase;color:var(--cinza2)}
+@media(min-width:761px){.rodape{padding-bottom:clamp(26px,5vw,40px)}}
+
+/* ---------- CTA flutuante (mobile) ---------- */
+
+.flutua{
+  position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:44;
+  display:flex;align-items:center;gap:11px;
+  padding:7px 7px 7px 15px;border-radius:99px;
+  background:var(--vidro-solido);border:var(--bd-vidro);
+  box-shadow:0 16px 38px rgba(16,42,67,.30), inset 0 1px 0 rgba(255,255,255,.9);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  transform:translate(-50%,150%);transition:transform .42s var(--e);
+  max-width:calc(100vw - 24px);
+}
+.flutua.on{transform:translate(-50%,0)}
+.flutua .txt{min-width:0}
+.flutua .txt .n{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.flutua .txt .v{font-family:var(--m);font-size:10.5px;font-weight:500;color:var(--cinza);font-variant-numeric:tabular-nums}
+.flutua .btn{padding:11px 18px;font-size:13.5px;flex:0 0 auto}
+@media(min-width:761px){.flutua{display:none}}
+
+/* ---------- checkout ---------- */
+
+.ov{
+  position:fixed;inset:0;z-index:60;display:flex;justify-content:center;align-items:flex-end;
+  background:rgba(13,28,43,.5);backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;transition:opacity .3s var(--e);
+}
+.ov.on{opacity:1;pointer-events:auto}
+.folha{
+  width:100%;max-width:432px;max-height:92dvh;overflow-y:auto;overflow-x:hidden;
+  background:var(--vidro-solido);border:var(--bd-vidro);
+  backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);
+  border-radius:20px 20px 0 0;box-shadow:0 -22px 60px rgba(13,28,43,.42);
+  transform:translateY(22px);transition:transform .36s var(--e);
+}
+.ov.on .folha{transform:none}
+@media(min-width:761px){
+  .ov{align-items:center}
+  .folha{border-radius:var(--r-painel);transform:scale(.975);max-height:88dvh}
+  .ov.on .folha{transform:none}
+}
+.folha .cab{position:relative;padding:15px clamp(16px,4vw,22px)}
+.folha .cab h3{font-size:17px}
+.folha .fechar{
+  margin-left:auto;flex:0 0 auto;border:0;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;
+  font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  border-radius:99px;padding:6px 11px;transition:background-color .2s var(--e);
+}
+.folha .fechar:hover{background:rgba(255,255,255,.28)}
+.folha .conteudo{padding:clamp(14px,3.6vw,20px) clamp(16px,4vw,22px) clamp(18px,4vw,22px)}
+.folha .dz{font-size:17px;margin-bottom:4px}
+
+.linha{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid rgba(52,67,78,.12)}
+.linha .k{font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--cinza2);flex:0 0 auto}
+.linha .vv{font-size:13.5px;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+.linha .vv em{display:block;font-style:normal;font-size:11.5px;color:var(--cinza);margin-top:3px}
+.linha .alt{
+  margin-left:8px;border:0;background:none;cursor:pointer;padding:0;
+  font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--teal-dk);text-decoration:underline;text-underline-offset:3px;
+}
+.linha.economia .vv{color:var(--ambar-dk);font-weight:600}
+.linha.total .vv{font-family:var(--m);font-weight:700;font-size:19px;letter-spacing:-.01em}
+
+.pglab{margin-top:15px;font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--cinza2)}
+.pg{margin-top:8px;display:grid;gap:7px}
+.pg label{
+  display:flex;align-items:center;gap:10px;padding:12px 13px;border-radius:12px;cursor:pointer;
+  border:1px solid rgba(52,67,78,.16);background:rgba(255,255,255,.6);
+  font-size:13.5px;color:var(--navy);transition:border-color .2s var(--e), background-color .2s var(--e);
+}
+.pg label:hover{border-color:rgba(52,67,78,.34)}
+.pg label.on{border-color:var(--teal);background:rgba(11,158,165,.07)}
+.pg input{accent-color:var(--teal);width:16px;height:16px;flex:0 0 auto}
+.pg .bd{margin-left:auto}
+.folha .fino{margin-top:11px;font-size:11.5px;line-height:1.42;color:var(--cinza);text-align:center}
+.folha .proto{margin-top:11px;text-align:center;font-family:var(--m);font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cinza2)}
+
+/* ---------- revelações ---------- */
+
+.rv{opacity:0;translate:0 14px;transition:opacity .7s var(--e), translate .7s var(--e)}
+.rv.in{opacity:1;translate:0 0}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation-duration:.01ms !important;transition-duration:.06s !important}
+  .rv{opacity:1;translate:0 0}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ══════════════ HERO: A ESTRADA ══════════════ -->
+<section class="hero">
+  <div class="cena" aria-hidden="true">
+    <svg viewBox="0 0 1200 520" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#7FB4D8"/><stop offset=".62" stop-color="#BBD9E8"/><stop offset="1" stop-color="#E6F0F4"/>
+        </linearGradient>
+        <linearGradient id="chao" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#A7AB92"/><stop offset="1" stop-color="#868B70"/>
+        </linearGradient>
+        <linearGradient id="neblina" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#E6F0F4" stop-opacity=".95"/><stop offset="1" stop-color="#E6F0F4" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="sombra" x="-60%" y="-60%" width="220%" height="220%">
+          <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#16324a" flood-opacity=".38"/>
+        </filter>
+      </defs>
+
+      <rect width="1200" height="212" fill="url(#ceu)"/>
+      <rect y="210" width="1200" height="310" fill="url(#chao)"/>
+
+      <!-- vegetação distante, muito suave -->
+      <g opacity=".34" fill="#7E8A6E">
+        <ellipse cx="180" cy="228" rx="86" ry="17"/><ellipse cx="1010" cy="232" rx="104" ry="19"/>
+        <ellipse cx="520" cy="221" rx="58" ry="11"/><ellipse cx="760" cy="224" rx="70" ry="13"/>
+      </g>
+
+      <!-- acostamento e pista -->
+      <polygon points="594,210 606,210 1030,520 170,520" fill="#93979D"/>
+      <polygon points="596,210 604,210 980,520 220,520" fill="#7A7E84"/>
+
+      <!-- faixa central -->
+      <g fill="#F2F5F6" opacity=".62">
+        <polygon points="598.7,220.4 601.3,220.4 602.4,231 597.6,231"/>
+        <polygon points="596.6,241.6 603.4,241.6 605.1,258.8 594.9,258.8"/>
+        <polygon points="593.3,275.9 606.7,275.9 609.1,300.8 590.9,300.8"/>
+        <polygon points="588.5,325.6 611.5,325.6 614.8,359.5 585.2,359.5"/>
+        <polygon points="581.9,393.3 618.1,393.3 622.4,437.3 577.6,437.3"/>
+        <polygon points="573.4,481.3 626.6,481.3 631.9,536 568.1,536"/>
+      </g>
+
+      <!-- neblina no horizonte -->
+      <rect y="206" width="1200" height="84" fill="url(#neblina)"/>
+
+      <!-- o carro, visto por trás -->
+      <g class="carro-grp">
+      <ellipse cx="600" cy="479" rx="95" ry="14" fill="#16324a" opacity=".24"/>
+      <g transform="translate(522,311) scale(.78)" filter="url(#sombra)">
+        <path d="M62 8 C46 11 32 38 26 76 C17 110 8 142 10 174 C12 198 26 212 44 214 L156 214 C174 212 188 198 190 174 C192 142 183 110 174 76 C168 38 154 11 138 8 Z" fill="#79828A" stroke="#2A3037" stroke-width="2.4"/>
+        <path d="M26 118 C14 126 8 146 10 174 C12 196 24 210 40 213 L40 132 Z" fill="#616A72"/>
+        <path d="M174 118 C186 126 192 146 190 174 C188 196 176 210 160 213 L160 132 Z" fill="#535B63"/>
+        <path d="M64 12 C54 20 46 46 42 74 L158 74 C154 46 146 20 136 12 Z" fill="#B7C0C7"/>
+        <path d="M52 78 C50 78 49 80 49 82 L47 122 C47 125 49 127 52 127 L148 127 C151 127 153 125 153 122 L151 82 C151 80 150 78 148 78 Z" fill="#2F363E"/>
+        <path d="M57 84 L143 84 L145 110 L55 110 Z" fill="#454F59" opacity=".5"/>
+        <path d="M44 131 C42 131 41 133 41 135 L40 172 C40 175 42 177 45 177 L155 177 C158 177 160 175 160 172 L159 135 C159 133 158 131 156 131 Z" fill="#8E979F"/>
+        <rect x="20" y="146" width="28" height="30" rx="9" fill="#B93B2E" stroke="#2A3037" stroke-width="1.6"/>
+        <rect x="24" y="150" width="20" height="15" rx="6" fill="#DB5A4E"/>
+        <rect x="152" y="146" width="28" height="30" rx="9" fill="#B93B2E" stroke="#2A3037" stroke-width="1.6"/>
+        <rect x="156" y="150" width="20" height="15" rx="6" fill="#DB5A4E"/>
+        <path d="M28 178 L172 178 C178 178 182 184 181 192 C180 202 170 208 158 208 L42 208 C30 208 20 202 19 192 C18 184 22 178 28 178 Z" fill="#1F2429"/>
+        <rect x="74" y="181" width="52" height="15" rx="3" fill="#EEF2F4"/>
+        <rect x="74" y="181" width="52" height="4.6" rx="2" fill="#1E5FA8"/>
+        <rect x="44" y="197" width="26" height="8" rx="4" fill="#A9B1B8"/>
+        <rect x="130" y="197" width="26" height="8" rx="4" fill="#A9B1B8"/>
+        <path d="M18 62 C10 62 6 66 6 70 C6 74 10 77 16 77 L26 74 L26 63 Z" fill="#616A72"/>
+        <path d="M182 62 C190 62 194 66 194 70 C194 74 190 77 184 77 L174 74 L174 63 Z" fill="#535B63"/>
+        <path d="M42 74 L158 74 L158 79 L42 79 Z" fill="#2A3037" opacity=".5"/>
+      </g>
+      </g>
+    </svg>
+  </div>
+
+  <header class="topo">
+    <a href="notecar-6-blocos.html" aria-label="Notecar — início">
+      <svg class="lg" viewBox="0 0 529 126" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Notecar" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"> <g transform="matrix(1,0,0,1,-74.722711,-361.361306)"> <g transform="matrix(1,0,0,1,-1278.600679,-124.406589)"> <g> <g transform="matrix(3.496087,0,0,3.496087,935.205528,-1763.46096)"> <path d="M245.091,660.513C244.991,659.146 244.608,658.029 243.941,657.163C243.274,656.296 242.008,655.863 240.141,655.863C238.708,655.863 237.608,656.088 236.841,656.538C236.074,656.988 235.549,657.571 235.266,658.288C234.983,659.004 234.841,659.746 234.841,660.513L227.391,660.513C227.391,658.613 227.891,656.813 228.891,655.113C229.891,653.413 231.341,652.029 233.241,650.963C235.141,649.896 237.441,649.363 240.141,649.363C243.808,649.363 246.658,650.354 248.691,652.338C250.724,654.321 251.891,657.046 252.191,660.512L252.241,678.163L245.091,678.163L245.091,675.463C244.324,676.529 243.283,677.379 241.966,678.013C240.649,678.646 239.258,678.963 237.791,678.963C235.958,678.963 234.333,678.621 232.916,677.938C231.499,677.254 230.383,676.263 229.566,674.963C228.749,673.663 228.341,672.079 228.341,670.213C228.341,668.046 228.858,666.329 229.891,665.063C230.924,663.796 232.283,662.846 233.966,662.213C235.649,661.579 237.466,661.146 239.416,660.913C241.366,660.679 243.258,660.546 245.091,660.513L245.091,660.513L245.091,660.513ZM245.091,666.613C241.791,666.546 239.416,666.788 237.966,667.338C236.516,667.888 235.791,668.779 235.791,670.013C235.791,670.913 236.133,671.546 236.816,671.913C237.499,672.279 238.291,672.463 239.191,672.463C240.058,672.463 240.949,672.329 241.866,672.063C242.783,671.796 243.549,671.279 244.166,670.513C244.783,669.746 245.091,668.613 245.091,667.113L245.091,666.613ZM261.891,664.463L261.891,678.163L254.741,678.163L254.741,650.163L261.891,650.163L261.891,654.426C262.074,653.956 262.299,653.493 262.566,653.038C263.183,651.988 264.141,651.113 265.441,650.413C266.741,649.713 268.508,649.363 270.741,649.363L270.741,656.363C268.774,656.363 267.133,656.579 265.816,657.013C264.499,657.446 263.516,658.238 262.866,659.388C262.216,660.538 261.891,662.229 261.891,664.463Z" style="fill:rgb(70,181,185);"/> </g> <g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"> <path d="M241.885,671.677C242.905,671.594 243.757,671.319 244.441,670.855C245.274,670.288 245.891,669.546 246.291,668.63C246.691,667.713 246.891,666.721 246.891,665.655L254.341,665.655C254.341,668.055 253.791,670.205 252.691,672.105C251.591,674.005 250.058,675.496 248.091,676.58C246.299,677.567 244.23,678.104 241.885,678.192L241.885,671.677Z" style="fill:rgb(70,181,186);"/> </g> <g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"> <path d="M241.885,648.619C244.137,648.712 246.156,649.266 247.941,650.28C249.908,651.396 251.449,652.846 252.566,654.63C253.683,656.413 254.241,658.338 254.241,660.405L246.691,660.405C246.691,659.505 246.508,658.655 246.141,657.855C245.774,657.055 245.191,656.396 244.391,655.88C243.735,655.456 242.899,655.206 241.885,655.13L241.885,648.619Z" style="fill:rgb(70,181,186);"/> </g> </g> <g> <g transform="matrix(3.496087,0,0,3.496087,578.27288,-1760.133869)"> <path d="M266.991,678.205C264.124,678.205 261.616,677.58 259.466,676.33C257.316,675.08 255.649,673.338 254.466,671.105C253.283,668.871 252.691,666.321 252.691,663.455C252.691,660.555 253.283,657.988 254.466,655.755C255.649,653.521 257.316,651.771 259.466,650.505C261.616,649.238 264.133,648.605 267.016,648.605C269.899,648.605 272.408,649.238 274.541,650.505C276.674,651.771 278.333,653.521 279.516,655.755C280.699,657.988 281.291,660.555 281.291,663.455C281.291,666.321 280.699,668.871 279.516,671.105C278.333,673.338 276.674,675.08 274.541,676.33C272.408,677.58 269.891,678.205 266.991,678.205ZM267.016,671.805C268.633,671.805 269.949,671.43 270.966,670.68C271.983,669.93 272.741,668.921 273.241,667.655C273.741,666.388 273.991,664.985 273.991,663.446C273.991,661.885 273.741,660.463 273.241,659.18C272.741,657.896 271.983,656.88 270.966,656.13C269.949,655.38 268.633,655.005 267.016,655.005C265.399,655.005 264.074,655.38 263.041,656.13C262.008,656.88 261.241,657.896 260.741,659.18C260.241,660.463 259.991,661.885 259.991,663.446C259.991,664.985 260.241,666.388 260.741,667.655C261.241,668.921 262.008,669.93 263.041,670.68C264.074,671.43 265.399,671.805 267.016,671.805Z" style="fill:rgb(16,42,67);fill-rule:nonzero;"/> <path d="M288.907,677.405C286.385,677.405 284.341,675.36 284.341,672.838C284.341,663.356 284.341,642.405 284.341,642.405L291.491,642.405L291.491,671.305L293.125,671.305C294.336,671.305 295.497,671.786 296.353,672.642C297.21,673.498 297.691,674.66 297.691,675.871L297.691,675.97C297.691,676.762 297.049,677.405 296.256,677.405C294.51,677.405 291.476,677.405 288.907,677.405ZM281.141,655.505L281.141,649.405L296.891,649.405L296.891,655.505L281.141,655.505Z" style="fill:rgb(16,42,67);fill-rule:nonzero;"/> </g> <g transform="matrix(3.496087,0,0,3.496087,419.725353,-1760.133869)"> <path d="M274.041,651.563L274.041,677.405L267.041,677.405L267.041,642.405L273.59,642.405C276.12,642.405 278.417,643.878 279.471,646.177C282.76,653.35 289.591,668.246 289.591,668.246L289.591,642.405L296.591,642.405L296.591,677.405L290.041,677.405C287.512,677.405 285.215,675.931 284.161,673.632C280.872,666.459 274.041,651.563 274.041,651.563Z" style="fill:rgb(16,42,67);"/> </g> <g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"> <path d="M239.443,678.123C237.293,677.916 235.367,677.319 233.666,676.33C231.516,675.08 229.849,673.338 228.666,671.105C227.483,668.871 226.891,666.321 226.891,663.455C226.891,660.555 227.483,657.988 228.666,655.755C229.849,653.521 231.516,651.771 233.666,650.505C235.367,649.502 237.293,648.896 239.443,648.687L239.443,655.255C238.526,655.426 237.742,655.742 237.091,656.205C236.058,656.938 235.316,657.938 234.866,659.205C234.416,660.471 234.191,661.888 234.191,663.455C234.191,664.988 234.416,666.38 234.866,667.63C235.316,668.88 236.058,669.871 237.091,670.605C237.742,671.067 238.526,671.383 239.443,671.554L239.443,678.123Z" style="fill:rgb(16,42,67);"/> </g> <g transform="matrix(1.254545,0,0,1.254545,-130.04479,-122.954)"> <path d="M1437.157,536.836C1437.677,536.836 1438.099,537.257 1438.099,537.777L1438.099,545.215C1438.099,546.775 1436.834,548.039 1435.274,548.039L1427.837,548.039C1427.317,548.039 1426.895,547.618 1426.895,547.098L1426.895,539.66C1426.895,538.1 1428.16,536.836 1429.719,536.836L1437.157,536.836Z" style="fill:rgb(16,42,67);"/> </g> </g> </g> </g> </svg>
+    </a>
+    <a class="volta" href="notecar-6-blocos.html">← <span class="lgx">a história do seu carro</span><span class="sm">voltar</span></a>
+  </header>
+
+  <div class="wrap">
+    <div class="painel centro rv">
+      <p class="rot">Planos e assinatura</p>
+      <h1 class="h1">Escolha como você quer cuidar dos seus veículos.</h1>
+      <p class="lead">Comece grátis ou tenha mais veículos, mais recursos e uma experiência sem anúncios.</p>
+      <p class="mn">Cancele quando quiser. <b>Seu histórico continua sendo seu.</b></p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ══════════════ SELETOR DE COBRANÇA ══════════════ -->
+  <div class="cobranca rv">
+    <div class="seg" role="radiogroup" aria-label="Periodicidade da cobrança">
+      <span class="knob" id="knob" aria-hidden="true"></span>
+      <button type="button" role="radio" aria-checked="false" data-ciclo="m" id="segM">Mensal</button>
+      <button type="button" role="radio" aria-checked="true"  data-ciclo="y" id="segY">Anual</button>
+    </div>
+    <span class="eco" id="eco">Economize no plano anual</span>
+  </div>
+
+  <!-- ══════════════ PLANOS ══════════════ -->
+  <section class="planos" aria-label="Planos do Notecar">
+
+    <!-- FREE -->
+    <article class="ficha free rv" data-plano="free" tabindex="0">
+      <div class="cab">
+        <div><h3>Notecar Free</h3><i>Meu carro</i></div>
+      </div>
+      <div class="corpo">
+        <p class="preco"><span class="cur">R$</span><span class="val">0</span></p>
+        <p class="eqv">Para sempre</p>
+        <p class="desc">Para começar a construir a história do seu carro.</p>
+        <p class="chapeu">Inclui</p>
+        <div class="linhas">
+          <div class="l"><span>1 veículo</span><b>✓</b></div>
+          <div class="l"><span>1 usuário</span><b>✓</b></div>
+          <div class="l"><span>Registros de manutenção</span><b>✓</b></div>
+          <div class="l"><span>Histórico do veículo</span><b>✓</b></div>
+          <div class="l"><span>Controle de quilometragem</span><b>✓</b></div>
+          <div class="l"><span>Lembretes básicos</span><b>✓</b></div>
+          <div class="l"><span>Compartilhamento do histórico</span><b>✓</b></div>
+          <div class="l"><span>Transferência do histórico para um novo proprietário</span><b>✓</b></div>
+          <div class="l nota"><span>Anúncios discretos somente na Home</span></div>
+        </div>
+        <button class="btn sec bloco" type="button" data-cta="free">Começar grátis</button>
+      </div>
+    </article>
+
+    <!-- PLUS -->
+    <article class="ficha rec rv" data-plano="plus" tabindex="0">
+      <div class="cab">
+        <div><h3>Notecar Plus</h3><i>Meus veículos</i></div>
+        <span class="selo">Mais escolhido</span>
+      </div>
+      <div class="corpo">
+        <p class="preco"><span class="cur">R$</span><span class="val" data-preco="plus">89,90</span><span class="per" data-per="plus">/ano</span></p>
+        <p class="eqv" data-eqv="plus">Equivale a <b>R$ 7,49/mês</b></p>
+        <p class="desc">Para quem quer cuidar e documentar tudo sobre seus veículos.</p>
+        <p class="chapeu">Tudo do Free, mais</p>
+        <div class="linhas">
+          <div class="l"><span>Até 3 veículos</span><b>✓</b></div>
+          <div class="l"><span>Sem anúncios</span><b>✓</b></div>
+          <div class="l"><span>Documentos e anexos ampliados</span><b>✓</b></div>
+          <div class="l"><span>Recursos premium</span><b>✓</b></div>
+          <div class="l"><span>Relatórios e exportações</span><b>✓</b></div>
+          <div class="l"><span>Experiência completa do Notecar</span><b>✓</b></div>
+        </div>
+        <p class="mini">Limites de anexos, relatórios e exportações conforme a configuração do produto.</p>
+        <button class="btn pri bloco" type="button" data-cta="plus">Assinar Notecar Plus</button>
+      </div>
+    </article>
+
+    <!-- FAMÍLIA -->
+    <article class="ficha fam rv" data-plano="familia" tabindex="0">
+      <div class="cab">
+        <div><h3>Notecar Família</h3><i>Nossos veículos</i></div>
+      </div>
+      <div class="corpo">
+        <p class="preco"><span class="cur">R$</span><span class="val" data-preco="familia">139,90</span><span class="per" data-per="familia">/ano</span></p>
+        <p class="eqv" data-eqv="familia">Equivale a <b>R$ 11,66/mês</b></p>
+        <p class="desc">Para quem cuida de mais veículos e compartilha essa responsabilidade com a família.</p>
+        <p class="chapeu">Tudo do Plus, mais</p>
+        <div class="linhas">
+          <div class="l"><span>Até 5 veículos</span><b>✓</b></div>
+          <div class="l"><span>Até 4 usuários dependentes</span><b>✓</b></div>
+          <div class="l"><span>Garagem compartilhada</span><b>✓</b></div>
+          <div class="l"><span>Acesso aos veículos autorizados</span><b>✓</b></div>
+          <div class="l"><span>Histórico compartilhado entre os usuários responsáveis</span><b>✓</b></div>
+          <div class="l"><span>Gestão familiar dos veículos</span><b>✓</b></div>
+        </div>
+        <button class="btn sec bloco" type="button" data-cta="familia">Assinar Notecar Família</button>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ══════════════ COMPARAÇÃO RÁPIDA ══════════════ -->
+  <section class="quadro rv">
+    <div class="cab">
+      <div><h3>Comparação rápida</h3><i>Free · Plus · Família</i></div>
+    </div>
+    <div class="tab-wrap">
+      <table class="cmp">
+        <colgroup><col class="lab"><col class="pl"><col class="pl"><col class="pl"></colgroup>
+        <thead>
+          <tr><th scope="col"></th><th scope="col">Free</th><th scope="col" class="p">Plus</th><th scope="col">Família</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Veículos</th><td class="v">1</td><td class="p v">até 3</td><td class="v">até 5</td></tr>
+          <tr><th scope="row">Usuários</th><td class="v">1</td><td class="p v">1</td><td class="v">até 4 dependentes</td></tr>
+          <tr><th scope="row">Histórico</th><td class="sim">✓</td><td class="p sim">✓</td><td class="sim">✓</td></tr>
+          <tr><th scope="row">Manutenções</th><td class="sim">✓</td><td class="p sim">✓</td><td class="sim">✓</td></tr>
+          <tr><th scope="row">Transferência do histórico</th><td class="sim">✓</td><td class="p sim">✓</td><td class="sim">✓</td></tr>
+          <tr><th scope="row">Anúncios</th><td>Sim</td><td class="p">Não</td><td>Não</td></tr>
+          <tr><th scope="row">Recursos premium</th><td class="nao">—</td><td class="p sim">✓</td><td class="sim">✓</td></tr>
+          <tr><th scope="row">Garagem compartilhada</th><td class="nao">—</td><td class="p nao">—</td><td class="sim">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════════ REFORÇO DE VALOR ══════════════ -->
+  <section class="valor rv">
+    <h2 class="h2">Um pequeno valor para preservar uma grande história.</h2>
+    <p class="lead">Revisões, serviços, peças, documentos e cuidados ficam organizados em um único lugar — hoje e quando chegar a hora de passar o veículo adiante.</p>
+    <div class="pilares">
+      <div class="pilar"><h3>Organize</h3><p>Tudo o que acontece com seu veículo.</p></div>
+      <div class="pilar"><h3>Comprove</h3><p>Como ele foi cuidado ao longo do tempo.</p></div>
+      <div class="pilar"><h3>Compartilhe</h3><p>O histórico quando precisar.</p></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ GARANTIAS ══════════════ -->
+  <ul class="garantias rv">
+    <li>Pagamento seguro</li>
+    <li>Assinatura cancelável</li>
+    <li>Histórico do veículo preservado</li>
+    <li>Dados protegidos</li>
+    <li>Transferência de histórico disponível mesmo no plano gratuito</li>
+  </ul>
+
+  <!-- ══════════════ FAQ ══════════════ -->
+  <section class="faq rv">
+    <h2 class="h2">Perguntas rápidas</h2>
+    <div class="faq-lista">
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">Posso usar o Notecar gratuitamente?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Sim. O plano Free permite cadastrar um veículo e utilizar os principais recursos de histórico e manutenção.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">O que acontece com meus registros se eu cancelar?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Os registros do veículo não são apagados simplesmente porque uma assinatura terminou. Recursos premium passam a seguir as regras do plano vigente.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">Posso transferir o histórico ao vender meu carro?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Sim. A transferência do histórico é parte central do Notecar e permanece disponível também para usuários do plano gratuito.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">Posso mudar de plano depois?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Sim, conforme as regras de upgrade e downgrade implementadas na plataforma.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">A assinatura vale para todos os meus veículos?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Cada plano possui seu próprio limite de veículos.</p></div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+<!-- ══════════════ FECHO: A ESTRADA CONTINUA ══════════════ -->
+<section class="fecho">
+  <div class="cena" aria-hidden="true">
+    <svg viewBox="0 0 1200 520" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <linearGradient id="ceu2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#9FC6E0"/><stop offset=".6" stop-color="#CBE2ED"/><stop offset="1" stop-color="#E9F2F5"/>
+        </linearGradient>
+        <linearGradient id="chao2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ABAF96"/><stop offset="1" stop-color="#8B9075"/>
+        </linearGradient>
+        <linearGradient id="neblina2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#E9F2F5" stop-opacity=".95"/><stop offset="1" stop-color="#E9F2F5" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect width="1200" height="212" fill="url(#ceu2)"/>
+      <rect y="210" width="1200" height="310" fill="url(#chao2)"/>
+      <g opacity=".3" fill="#7E8A6E">
+        <ellipse cx="240" cy="230" rx="96" ry="18"/><ellipse cx="940" cy="234" rx="112" ry="20"/><ellipse cx="640" cy="222" rx="52" ry="10"/>
+      </g>
+      <polygon points="594,210 606,210 1030,520 170,520" fill="#93979D"/>
+      <polygon points="596,210 604,210 980,520 220,520" fill="#7A7E84"/>
+      <g fill="#F2F5F6" opacity=".62">
+        <polygon points="598.7,220.4 601.3,220.4 602.4,231 597.6,231"/>
+        <polygon points="596.6,241.6 603.4,241.6 605.1,258.8 594.9,258.8"/>
+        <polygon points="593.3,275.9 606.7,275.9 609.1,300.8 590.9,300.8"/>
+        <polygon points="588.5,325.6 611.5,325.6 614.8,359.5 585.2,359.5"/>
+        <polygon points="581.9,393.3 618.1,393.3 622.4,437.3 577.6,437.3"/>
+        <polygon points="573.4,481.3 626.6,481.3 631.9,536 568.1,536"/>
+      </g>
+      <rect y="206" width="1200" height="84" fill="url(#neblina2)"/>
+      </svg>
+  </div>
+
+  <div class="wrap">
+    <div class="painel rv">
+      <h2 class="h2">Comece hoje a construir a história do seu carro.</h2>
+      <div class="acoes">
+        <button class="btn sec" type="button" data-cta="free">Começar grátis</button>
+        <button class="btn pri" type="button" data-cta="plus">Assinar Notecar Plus</button>
+      </div>
+      <p class="dz">Seu carro muda com o tempo. A história dele não precisa se perder.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer class="rodape">
+    <svg class="simb" viewBox="0 0 128 138" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"> <g transform="matrix(1,0,0,1,-40.678943,-182.686536)"> <g transform="matrix(1.375362,0,0,1.375362,-773.794119,-659.699792)"> <g> <g> <path d="M634.639,712.324L597.295,674.98C594.025,671.71 592.188,667.275 592.188,662.651C592.188,658.027 594.025,653.592 597.295,650.322L634.639,612.978L634.639,633.558C631.435,634.156 628.694,635.263 626.416,636.879C622.804,639.443 620.211,642.939 618.638,647.367C617.064,651.796 616.278,656.749 616.278,662.226C616.278,667.586 617.064,672.452 618.638,676.822C620.211,681.192 622.804,684.659 626.416,687.223C628.694,688.839 631.435,689.946 634.639,690.543L634.639,712.324Z" style="fill:rgb(16,42,67);"/> <path d="M637.369,654.104C638.021,654.104 638.55,654.633 638.55,655.285L638.55,664.616C638.55,666.573 636.964,668.16 635.007,668.16L625.676,668.16C625.023,668.16 624.495,667.631 624.495,666.979L624.495,657.648C624.495,655.691 626.081,654.104 628.038,654.104L637.369,654.104Z" style="fill:rgb(16,42,67);"/> </g> <g> <path d="M682.142,651.563L659.979,651.563C659.979,648.416 659.338,645.445 658.056,642.648C656.774,639.851 654.735,637.549 651.938,635.743C649.644,634.262 646.724,633.388 643.176,633.121L643.176,612.483L681.015,650.322C681.412,650.719 681.788,651.133 682.142,651.563Z" style="fill:rgb(70,181,186);"/> <g> <path d="M643.176,712.819L643.176,690.973C646.744,690.681 649.722,689.722 652.113,688.097C655.026,686.116 657.182,683.523 658.58,680.318C659.979,677.113 660.678,673.646 660.678,669.917L684.536,669.917C683.681,671.783 682.495,673.501 681.015,674.98L643.176,712.819Z" style="fill:rgb(70,181,186);"/> </g> </g> </g> </g> </g> </svg>
+    <p>Notecar · o prontuário do seu carro</p>
+  </footer>
+</div>
+
+<!-- ══════════════ CTA FLUTUANTE (MOBILE) ══════════════ -->
+<div class="flutua" id="flutua" role="region" aria-label="Plano selecionado">
+  <div class="txt">
+    <p class="n" id="flNome">Notecar Plus</p>
+    <p class="v" id="flPreco">R$ 89,90/ano</p>
+  </div>
+  <button class="btn pri" type="button" id="flBtn">Assinar</button>
+</div>
+
+<!-- ══════════════ CHECKOUT ══════════════ -->
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ckNome" hidden>
+  <div class="folha" id="folha">
+    <div class="cab">
+      <div>
+        <i style="color:rgba(255,255,255,.6)">Você escolheu</i>
+        <h3 id="ckNome">Notecar Plus</h3>
+      </div>
+      <button class="fechar" type="button" id="ckFechar" aria-label="Fechar">fechar</button>
+    </div>
+    <div class="conteudo">
+      <p class="dz" id="ckMao">meus veículos</p>
+
+      <div class="linha">
+        <span class="k">Periodicidade</span>
+        <span class="vv"><span id="ckCiclo">Anual</span><button class="alt" type="button" id="ckAlt">alterar</button></span>
+      </div>
+      <div class="linha">
+        <span class="k">Valor</span>
+        <span class="vv"><span id="ckValor">R$ 89,90 por ano</span><em id="ckEqv">Equivalente a R$ 7,49/mês</em></span>
+      </div>
+      <div class="linha economia" id="ckEcoLinha">
+        <span class="k">Economia anual</span>
+        <span class="vv" id="ckEco">R$ 28,90</span>
+      </div>
+      <div class="linha total">
+        <span class="k">Total da cobrança</span>
+        <span class="vv" id="ckTotal">R$ 89,90</span>
+      </div>
+
+      <p class="pglab">Forma de pagamento</p>
+      <div class="pg" id="pg">
+        <label class="on"><input type="radio" name="pg" value="cartao" checked>Cartão de crédito<span class="bd i">Recorrente</span></label>
+        <label><input type="radio" name="pg" value="pix">PIX<span class="bd c">À vista</span></label>
+      </div>
+
+      <button class="btn pri bloco" type="button" id="ckConfirmar">Confirmar assinatura</button>
+      <p class="fino">Você poderá cancelar sua assinatura de acordo com as regras da plataforma de pagamento utilizada.</p>
+      <p class="proto">Protótipo · nenhuma cobrança é realizada</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var REDUZ = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var PLANOS = {
+    free:    { nome:'Notecar Free',    mao:'meu carro' },
+    plus:    { nome:'Notecar Plus',    mao:'meus veículos',   m:9.90,  y:89.90,  eq:'7,49'  },
+    familia: { nome:'Notecar Família', mao:'nossos veículos', m:14.90, y:139.90, eq:'11,66' }
+  };
+  var brl = function(v){ return v.toFixed(2).replace('.', ','); };
+
+  var ciclo = 'y';
+  var escolhido = null;
+
+  /* ---------- seletor mensal / anual ---------- */
+  var segM = document.getElementById('segM'),
+      segY = document.getElementById('segY'),
+      knob = document.getElementById('knob'),
+      eco  = document.getElementById('eco');
+
+  function moveKnob(){
+    var b = ciclo === 'y' ? segY : segM;
+    knob.style.width = b.offsetWidth + 'px';
+    knob.style.transform = 'translateX(' + b.offsetLeft + 'px)';
+  }
+  function precoDe(k){ var p = PLANOS[k]; return ciclo === 'y' ? p.y : p.m; }
+
+  function pintaPrecos(anima){
+    ['plus','familia'].forEach(function(k){
+      var p = PLANOS[k];
+      var val = document.querySelector('[data-preco="'+k+'"]');
+      var per = document.querySelector('[data-per="'+k+'"]');
+      var eqv = document.querySelector('[data-eqv="'+k+'"]');
+      val.textContent = brl(precoDe(k));
+      per.textContent = ciclo === 'y' ? '/ano' : '/mês';
+      eqv.innerHTML = ciclo === 'y' ? 'Equivale a <b>R$ ' + p.eq + '/mês</b>' : 'Cobrado mensalmente';
+      if(anima && !REDUZ){
+        [val,per,eqv].forEach(function(el){ el.classList.remove('troca'); void el.offsetWidth; el.classList.add('troca'); });
+      }
+    });
+    eco.classList.toggle('dim', ciclo !== 'y');
+    segM.setAttribute('aria-checked', ciclo === 'm');
+    segY.setAttribute('aria-checked', ciclo === 'y');
+    moveKnob();
+    sincFlutua();
+    if(document.getElementById('ov').classList.contains('on')) pintaCheckout();
+  }
+  function setCiclo(c, anima){ if(c === ciclo) return; ciclo = c; pintaPrecos(anima !== false); }
+  segM.addEventListener('click', function(){ setCiclo('m'); });
+  segY.addEventListener('click', function(){ setCiclo('y'); });
+
+  /* ---------- seleção de plano + CTA flutuante ---------- */
+  var fichas = Array.prototype.slice.call(document.querySelectorAll('.ficha'));
+  var flutua = document.getElementById('flutua'),
+      flNome = document.getElementById('flNome'),
+      flPreco = document.getElementById('flPreco'),
+      flBtn = document.getElementById('flBtn');
+
+  function escolher(k){
+    escolhido = k;
+    fichas.forEach(function(f){ f.classList.toggle('sel', f.dataset.plano === k); });
+    sincFlutua();
+  }
+  function sincFlutua(){
+    if(!escolhido || escolhido === 'free'){ flutua.classList.remove('on'); return; }
+    var p = PLANOS[escolhido];
+    flNome.textContent = p.nome;
+    flPreco.textContent = 'R$ ' + brl(precoDe(escolhido)) + (ciclo === 'y' ? '/ano' : '/mês');
+    flutua.classList.add('on');
+  }
+  fichas.forEach(function(f){
+    f.addEventListener('click', function(){ escolher(f.dataset.plano); });
+    f.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); escolher(f.dataset.plano); }
+    });
+  });
+
+  /* ---------- checkout ---------- */
+  var ov = document.getElementById('ov'),
+      ckNome = document.getElementById('ckNome'),
+      ckMao = document.getElementById('ckMao'),
+      ckCiclo = document.getElementById('ckCiclo'),
+      ckValor = document.getElementById('ckValor'),
+      ckEqv = document.getElementById('ckEqv'),
+      ckEco = document.getElementById('ckEco'),
+      ckEcoLinha = document.getElementById('ckEcoLinha'),
+      ckTotal = document.getElementById('ckTotal'),
+      ckAlt = document.getElementById('ckAlt'),
+      ckConfirmar = document.getElementById('ckConfirmar'),
+      focoAnterior = null;
+
+  function pintaCheckout(){
+    var k = escolhido && escolhido !== 'free' ? escolhido : 'plus';
+    var p = PLANOS[k];
+    ckNome.textContent = p.nome;
+    ckMao.textContent = p.mao;
+    ckCiclo.textContent = ciclo === 'y' ? 'Anual' : 'Mensal';
+    if(ciclo === 'y'){
+      ckValor.textContent = 'R$ ' + brl(p.y) + ' por ano';
+      ckEqv.textContent = 'Equivalente a R$ ' + p.eq + '/mês';
+      ckEqv.hidden = false;
+      ckEco.textContent = 'R$ ' + brl(p.m * 12 - p.y);
+      ckEcoLinha.hidden = false;
+      ckTotal.textContent = 'R$ ' + brl(p.y);
+    } else {
+      ckValor.textContent = 'R$ ' + brl(p.m) + ' por mês';
+      ckEqv.textContent = ''; ckEqv.hidden = true;
+      ckEco.textContent = ''; ckEcoLinha.hidden = true;
+      ckTotal.textContent = 'R$ ' + brl(p.m);
+    }
+    ckConfirmar.textContent = 'Confirmar assinatura';
+    ckConfirmar.disabled = false;
+  }
+  function abrir(k){
+    if(k) escolher(k);
+    pintaCheckout();
+    focoAnterior = document.activeElement;
+    ov.hidden = false;
+    requestAnimationFrame(function(){ ov.classList.add('on'); });
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ ckConfirmar.focus({preventScroll:true}); }, 220);
+  }
+  function fechar(){
+    ov.classList.remove('on');
+    document.body.style.overflow = '';
+    setTimeout(function(){ ov.hidden = true; }, 300);
+    if(focoAnterior) focoAnterior.focus({preventScroll:true});
+  }
+  document.getElementById('ckFechar').addEventListener('click', fechar);
+  ov.addEventListener('click', function(e){ if(e.target === ov) fechar(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && ov.classList.contains('on')) fechar(); });
+  ckAlt.addEventListener('click', function(){ setCiclo(ciclo === 'y' ? 'm' : 'y'); });
+  flBtn.addEventListener('click', function(){ abrir(escolhido); });
+  ckConfirmar.addEventListener('click', function(){
+    ckConfirmar.textContent = 'Aguardando integração de pagamento';
+    ckConfirmar.disabled = true;
+  });
+  document.querySelectorAll('[data-cta]').forEach(function(b){
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      var k = b.dataset.cta;
+      if(k === 'free'){ escolher('free'); return; }
+      abrir(k);
+    });
+  });
+
+  var pg = document.getElementById('pg');
+  pg.addEventListener('change', function(){
+    pg.querySelectorAll('label').forEach(function(l){ l.classList.toggle('on', l.querySelector('input').checked); });
+  });
+
+  /* ---------- FAQ ---------- */
+  document.querySelectorAll('.faq-q').forEach(function(q){
+    var a = q.nextElementSibling;
+    q.addEventListener('click', function(){
+      var aberto = q.getAttribute('aria-expanded') === 'true';
+      document.querySelectorAll('.faq-q').forEach(function(o){
+        if(o !== q && o.getAttribute('aria-expanded') === 'true'){
+          o.setAttribute('aria-expanded','false');
+          o.nextElementSibling.style.height = '0px';
+        }
+      });
+      q.setAttribute('aria-expanded', String(!aberto));
+      a.style.height = aberto ? '0px' : a.firstElementChild.offsetHeight + 'px';
+    });
+  });
+
+  /* ---------- revelações ---------- */
+  if('IntersectionObserver' in window && !REDUZ){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:.08});
+    document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- resize ---------- */
+  var t;
+  window.addEventListener('resize', function(){
+    clearTimeout(t);
+    t = setTimeout(function(){
+      moveKnob();
+      document.querySelectorAll('.faq-q[aria-expanded="true"]').forEach(function(q){
+        q.nextElementSibling.style.height = q.nextElementSibling.firstElementChild.offsetHeight + 'px';
+      });
+    }, 140);
+  });
+
+  document.fonts && document.fonts.ready.then(moveKnob);
+  pintaPrecos(false);
+})();
+</script>
+</body>
+</html>

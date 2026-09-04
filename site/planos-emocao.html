@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Notecar — planos e assinatura</title>
+<meta name="description" content="Escolha como você quer cuidar dos seus veículos. Comece grátis ou tenha mais veículos, mais recursos e uma experiência sem anúncios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Glory:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Playpen+Sans:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   Notecar — página de planos · conceito polaroides
+   Design system herdado de notecar-palco-v3 / landing v9
+   ============================================================ */
+
+:root{
+  --navy:#102A43; --navy-md:#1B3A57;
+  --deep:#0E2029; --deep-2:#123642;
+  --teal-dk:#0E6474; --teal:#0B9EA5; --teal-md:#46B5BA; --teal-lt:#80CBCF; --teal-pl:#BAE1E4;
+  --laranja:#E8503A; --laranja-dk:#C0402C; --laranja-pl:#FBDDD7;
+  --ambar:#D9A22B; --ambar-dk:#8A6A1F; --ambar-pl:#F6E7C8;
+  --paper:#F1EFEA;
+  --card:#fff; --card-2:#FBFCFC;
+  --surf:#F4F7F8; --surf-2:#E4EAEE;
+  --ink:#102A43; --ink-2:#34434E; --ink-3:#7B8894;
+  --line:rgba(16,42,67,.10);
+  --display:'Glory',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --manu:'Playpen Sans',cursive;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --sh-paper:0 1px 2px rgba(16,42,67,.16), 0 12px 30px -8px rgba(16,42,67,.20);
+  --sh-paper-up:0 2px 4px rgba(16,42,67,.14), 0 26px 56px -16px rgba(16,42,67,.30);
+  --sh-cta:0 10px 26px rgba(232,80,58,.28);
+  --wrap:1080px;
+  --sec:clamp(54px,9vw,104px);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none !important}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--display);
+  font-size:16px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+/* fundo: luz suave + grão de papel (mesmo do palco) */
+.bg-light,.bg-grain{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg-light{background:radial-gradient(120% 58% at 50% 0%, rgba(255,255,255,.70), rgba(255,255,255,0) 68%)}
+.bg-grain{
+  opacity:.035;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.wrap{position:relative;z-index:1;width:100%;max-width:var(--wrap);margin:0 auto;padding:0 clamp(18px,5vw,32px)}
+
+/* ---------- utilitários tipográficos ---------- */
+
+.eyebrow{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);
+}
+.h1{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(27px,7.2vw,46px);line-height:1.14;letter-spacing:-.015em;
+  color:var(--navy);max-width:18ch;
+}
+.h2{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(21px,4.4vw,32px);line-height:1.2;letter-spacing:-.012em;color:var(--navy);
+}
+.lead{font-size:clamp(15px,3.6vw,18px);line-height:1.45;color:var(--ink-2);max-width:46ch}
+.micro{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.hand{font-family:var(--manu);font-weight:700;color:var(--teal-dk)}
+
+/* ---------- topo ---------- */
+
+.top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0 4px}
+.top .logo{width:clamp(118px,30vw,146px);height:auto;display:block}
+.top .back{
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);text-decoration:none;transition:color .2s var(--ease);white-space:nowrap;
+}
+.top .back:hover{color:var(--teal-dk)}
+.top .back .lg{display:none}
+@media(min-width:460px){.top .back .sm{display:none}.top .back .lg{display:inline}}
+
+/* ---------- hero ---------- */
+
+.hero{padding:clamp(22px,6vw,44px) 0 0}
+.hero .h1{margin-top:14px}
+.hero .lead{margin-top:14px}
+.hero .note{
+  margin-top:18px;display:block;
+  font-family:var(--mono);font-size:10.5px;line-height:1.7;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);
+}
+.hero .note b{font-weight:500;color:var(--teal-dk)}
+@media(min-width:600px){
+  .hero .note{
+    display:inline-flex;align-items:center;gap:9px;line-height:1.4;
+    background:rgba(255,255,255,.66);box-shadow:inset 0 0 0 1px var(--line);
+    border-radius:999px;padding:9px 15px;
+  }
+}
+@media(min-width:620px){
+  .hero{text-align:center}
+  .hero .h1,.hero .lead{margin-left:auto;margin-right:auto}
+}
+
+/* ---------- régua de hodômetro (assinatura do conceito) ---------- */
+
+.ruler{
+  position:relative;height:44px;margin:clamp(26px,6vw,42px) 0 clamp(28px,6vw,44px);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%);
+  overflow:hidden;
+}
+.ruler .track{position:absolute;inset:0}
+.tick{position:absolute;bottom:0;width:1px;background:#7C8890}
+.tick.minor{height:7px;opacity:.30}
+.tick.major{height:15px;opacity:.55}
+.tick-label{
+  position:absolute;bottom:20px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;color:var(--ink-3);opacity:.72;white-space:nowrap;
+}
+
+/* ---------- seletor de cobrança ---------- */
+
+.billing{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px}
+.seg{
+  position:relative;display:inline-flex;padding:4px;border-radius:999px;
+  background:rgba(255,255,255,.72);box-shadow:inset 0 0 0 1px var(--line), 0 6px 18px -12px rgba(16,42,67,.5);
+}
+.seg .knob{
+  position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:var(--navy);
+  transition:transform .36s var(--ease), width .36s var(--ease);
+}
+.seg button{
+  position:relative;z-index:1;border:0;background:none;cursor:pointer;
+  font-family:var(--display);font-weight:500;font-size:14.5px;letter-spacing:.005em;
+  color:var(--ink-2);padding:10px 22px;border-radius:999px;
+  transition:color .3s var(--ease);
+}
+.seg button[aria-checked="true"]{color:#fff}
+.save{
+  font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ambar-dk);background:var(--ambar-pl);border-radius:999px;padding:8px 13px;
+  transition:opacity .3s var(--ease), transform .3s var(--ease);
+}
+.save.dim{opacity:.42}
+
+/* ---------- planos ---------- */
+
+.plans{
+  margin-top:clamp(30px,6vw,46px);
+  display:grid;gap:26px;
+  grid-template-columns:1fr;
+}
+@media(min-width:620px) and (max-width:899px){
+  .plans{max-width:470px;margin-left:auto;margin-right:auto;gap:30px}
+}
+@media(min-width:900px){
+  .plans{grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+}
+
+/* papel fotográfico */
+.plan{
+  position:relative;display:flex;flex-direction:column;
+  background:linear-gradient(#fff,var(--card-2));
+  border-radius:3px;padding:12px 12px 0;
+  box-shadow:var(--sh-paper);
+  transform-origin:50% 100%;
+  transition:transform .32s var(--ease), box-shadow .32s var(--ease);
+  cursor:pointer;
+}
+.plan:hover{transform:translateY(-3px)}
+.plan.free{background:linear-gradient(#FCFCFB,#F8F9F9);box-shadow:0 1px 2px rgba(16,42,67,.10), 0 8px 22px -12px rgba(16,42,67,.28)}
+.plan.plus{box-shadow:var(--sh-paper-up), inset 0 0 0 1.5px rgba(11,158,165,.28)}
+.plan.sel{box-shadow:var(--sh-paper-up), inset 0 0 0 2px var(--teal)}
+@media(min-width:900px){
+  .plan.plus{transform:translateY(-10px)}
+  .plan.plus:hover{transform:translateY(-13px)}
+}
+
+.badge{
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);z-index:2;
+  background:var(--laranja);color:#fff;white-space:nowrap;
+  font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;
+  padding:6px 13px;border-radius:999px;box-shadow:0 8px 18px -6px rgba(232,80,58,.55);
+}
+
+/* janela do papel = preço */
+.win{
+  position:relative;background:var(--surf);
+  box-shadow:inset 0 0 0 1px rgba(16,42,67,.06);
+  padding:clamp(18px,4vw,22px) clamp(16px,4vw,20px);
+}
+.plan.plus .win{background:#F1F7F7}
+.win .name{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--ink-3)}
+.plan.plus .win .name{color:var(--teal-dk)}
+
+.price{margin-top:11px;display:flex;align-items:baseline;gap:6px;color:var(--navy)}
+.price .cur{font-family:var(--mono);font-size:15px;opacity:.62;transform:translateY(-2px)}
+.price .val{
+  font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums;
+  font-size:clamp(36px,9.4vw,44px);line-height:.96;letter-spacing:-.025em;
+}
+.price .per{font-family:var(--display);font-weight:400;font-size:14px;color:var(--ink-2)}
+.eq{margin-top:8px;font-size:12.5px;line-height:1.3;color:var(--ink-2);min-height:17px}
+.eq b{font-weight:500;color:var(--teal-dk)}
+.swap{animation:swapin .42s var(--ease) both}
+@keyframes swapin{from{opacity:0;filter:blur(5px);transform:translateY(7px)}to{opacity:1;filter:blur(0);transform:none}}
+
+/* tira do papel = descrição, benefícios e CTA */
+.strip{display:flex;flex-direction:column;flex:1;padding:15px 7px 18px}
+.strip .hand{font-size:21px;line-height:1.08}
+.strip .desc{margin-top:9px;font-size:13.5px;line-height:1.42;color:var(--ink-2)}
+.incl{
+  margin-top:17px;font-family:var(--mono);font-size:9.5px;font-weight:500;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);
+  padding-bottom:9px;border-bottom:1px solid var(--line);
+}
+.feats{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.feats li{display:flex;gap:9px;font-size:13.5px;line-height:1.34;color:var(--ink)}
+.feats li::before{content:'✓';font-family:var(--mono);font-size:10.5px;line-height:1.6;color:var(--teal);flex:0 0 10px}
+.feats li.n{color:var(--ink-3);font-size:12.5px}
+.feats li.n::before{content:'–';color:var(--ink-3)}
+.fine{margin-top:12px;font-size:11.5px;line-height:1.35;color:var(--ink-3)}
+
+/* botões */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.005em;
+  border:0;border-radius:14px;padding:15px 22px;cursor:pointer;text-decoration:none;
+  transition:transform .18s var(--ease), box-shadow .22s var(--ease), background-color .22s var(--ease), color .22s var(--ease);
+}
+.btn:active{transform:translateY(1px)}
+.btn-pri{background:var(--laranja);color:#fff;box-shadow:var(--sh-cta)}
+.btn-pri:hover{background:var(--laranja-dk);box-shadow:0 14px 30px -8px rgba(232,80,58,.55)}
+.btn-gh{background:transparent;color:var(--navy);box-shadow:inset 0 0 0 1.5px rgba(16,42,67,.20)}
+.btn-gh:hover{box-shadow:inset 0 0 0 1.5px rgba(16,42,67,.45);background:rgba(255,255,255,.6)}
+.btn-block{width:100%;margin-top:18px}
+
+/* ---------- comparação rápida ---------- */
+
+.compare{margin-top:var(--sec)}
+.compare .head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px}
+.table-wrap{margin-top:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.cmp{width:100%;min-width:290px;border-collapse:collapse;table-layout:fixed}
+table.cmp col.lab{width:37%}
+table.cmp col.pl{width:21%}
+table.cmp th,table.cmp td{padding:11px 6px;text-align:center;border-bottom:1px solid rgba(16,42,67,.08);font-size:13px}
+table.cmp thead th{
+  font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink-3);padding-bottom:10px;border-bottom:1px solid var(--line);
+}
+table.cmp thead th.p{color:var(--teal-dk)}
+table.cmp tbody th{
+  text-align:left;font-weight:400;font-size:12.5px;line-height:1.3;color:var(--ink-2);
+  padding-left:0;
+}
+table.cmp tbody td{line-height:1.3}
+table.cmp .p{background:rgba(11,158,165,.05)}
+table.cmp tbody tr:last-child th,table.cmp tbody tr:last-child td{border-bottom:0}
+.yes{font-family:var(--mono);color:var(--teal)}
+.no{color:var(--ink-3)}
+.v{font-variant-numeric:tabular-nums}
+
+/* ---------- reforço de valor (faixa escura) ---------- */
+
+.value{
+  position:relative;overflow:hidden;margin-top:var(--sec);
+  background:var(--deep);color:#EAF2F3;
+  border-radius:20px 10px 20px 10px;
+  padding:clamp(30px,6.4vw,58px) clamp(22px,5vw,52px);
+  box-shadow:0 28px 70px -34px rgba(6,16,27,.75);
+}
+.value::before{content:'';position:absolute;inset:0;background:radial-gradient(96% 62% at 50% 0%, rgba(140,205,210,.15), rgba(0,0,0,0) 70%);pointer-events:none}
+.value > *{position:relative}
+.value .h2{color:#F2F8F9;max-width:24ch}
+.value .lead{margin-top:14px;color:#A9BCC2;max-width:56ch}
+.pillars{
+  margin-top:clamp(26px,5vw,40px);display:grid;gap:0;
+  grid-template-columns:1fr;
+}
+.pillar{padding:16px 0;border-top:1px solid rgba(234,242,243,.14)}
+.pillar h3{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.19em;text-transform:uppercase;color:var(--teal-lt)}
+.pillar p{margin-top:7px;font-size:14.5px;line-height:1.38;color:#CFDDE1;max-width:30ch}
+@media(min-width:720px){
+  .pillars{grid-template-columns:repeat(3,1fr);gap:24px}
+  .pillar{padding:18px 0 0}
+}
+
+/* ---------- garantias ---------- */
+
+.trust{margin-top:clamp(28px,5vw,40px);display:grid;gap:10px;grid-template-columns:1fr}
+@media(min-width:600px){.trust{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.trust{grid-template-columns:repeat(5,1fr);gap:8px}}
+.trust li{
+  list-style:none;display:flex;gap:9px;align-items:flex-start;
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);line-height:1.5;
+}
+.trust li::before{content:'';flex:0 0 5px;height:5px;margin-top:6px;border-radius:50%;background:var(--teal-md)}
+
+/* ---------- FAQ ---------- */
+
+.faq{margin-top:var(--sec);max-width:760px}
+.faq-list{margin-top:14px;border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:none;border:0;cursor:pointer;text-align:left;padding:17px 0;
+  font-family:var(--display);font-weight:500;font-size:15.5px;line-height:1.3;color:var(--navy);
+  transition:color .2s var(--ease);
+}
+.faq-q:hover{color:var(--teal-dk)}
+.faq-q .pm{position:relative;flex:0 0 14px;height:14px}
+.faq-q .pm::before,.faq-q .pm::after{
+  content:'';position:absolute;left:0;top:6.5px;width:14px;height:1.5px;background:var(--ink-3);
+  transition:transform .3s var(--ease), background-color .2s var(--ease);
+}
+.faq-q .pm::after{transform:rotate(90deg)}
+.faq-q[aria-expanded="true"] .pm::before{background:var(--teal)}
+.faq-q[aria-expanded="true"] .pm::after{transform:rotate(0);background:var(--teal)}
+.faq-a{height:0;overflow:hidden;transition:height .34s var(--ease)}
+.faq-a p{padding:0 0 18px;font-size:14.5px;line-height:1.5;color:var(--ink-2);max-width:64ch}
+
+/* ---------- CTA final ---------- */
+
+.final{
+  margin:var(--sec) 0 0;padding:clamp(34px,7vw,64px) clamp(20px,5vw,40px);
+  text-align:center;background:linear-gradient(#fff,var(--card-2));
+  border-radius:3px;box-shadow:var(--sh-paper);
+}
+.final .h2{margin:0 auto;max-width:20ch}
+.final .acts{margin-top:clamp(22px,4vw,30px);display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.final .acts .btn{min-width:210px}
+.final .acts .btn-pri{font-size:16px;padding:17px 26px}
+.final .hand{margin-top:clamp(22px,4vw,28px);font-size:clamp(17px,4vw,21px);line-height:1.25}
+
+footer{padding:clamp(30px,6vw,54px) 0 calc(96px + env(safe-area-inset-bottom));text-align:center}
+footer .simb{width:34px;height:auto;margin:0 auto;display:block;opacity:.55}
+footer .micro{margin-top:12px}
+@media(min-width:761px){footer{padding-bottom:clamp(30px,6vw,54px)}}
+
+/* ---------- CTA sticky (mobile) ---------- */
+
+.sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;
+  display:flex;align-items:center;gap:12px;
+  padding:10px clamp(14px,4vw,18px) calc(10px + env(safe-area-inset-bottom));
+  background:rgba(252,252,251,.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);box-shadow:0 -14px 34px -22px rgba(16,42,67,.6);
+  transform:translateY(115%);transition:transform .4s var(--ease);
+}
+.sticky.on{transform:none}
+.sticky .info{flex:1;min-width:0}
+.sticky .info .n{font-size:14px;font-weight:500;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sticky .info .p{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sticky .btn{padding:13px 20px;font-size:14.5px;flex:0 0 auto}
+@media(min-width:761px){.sticky{display:none}}
+
+/* ---------- checkout ---------- */
+
+.ov{
+  position:fixed;inset:0;z-index:60;display:flex;justify-content:center;align-items:flex-end;
+  background:rgba(14,32,41,.46);backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease);
+}
+.ov.on{opacity:1;pointer-events:auto}
+.sheet{
+  width:100%;max-width:440px;max-height:92dvh;overflow-y:auto;
+  background:linear-gradient(#fff,var(--card-2));
+  border-radius:18px 18px 0 0;
+  padding:18px clamp(18px,5vw,24px) calc(20px + env(safe-area-inset-bottom));
+  box-shadow:0 -24px 70px -20px rgba(6,16,27,.5);
+  transform:translateY(22px);transition:transform .36s var(--ease);
+}
+.ov.on .sheet{transform:none}
+@media(min-width:761px){
+  .ov{align-items:center}
+  .sheet{border-radius:20px 10px 20px 10px;transform:scale(.975);padding-bottom:24px;max-height:88dvh}
+  .ov.on .sheet{transform:none}
+}
+.sheet .grip{width:38px;height:4px;border-radius:999px;background:var(--surf-2);margin:0 auto 14px}
+@media(min-width:761px){.sheet .grip{display:none}}
+.sheet .close{
+  position:absolute;top:0;right:0;border:0;background:none;cursor:pointer;
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:6px;
+}
+.sheet .close:hover{color:var(--navy)}
+.sheet .hd{position:relative;padding-right:60px}
+.sheet .chose{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--ink-3)}
+.sheet .pn{margin-top:6px;font-family:var(--display);font-weight:700;font-size:23px;line-height:1.1;color:var(--navy)}
+.sheet .ph{margin-top:5px;font-family:var(--manu);font-weight:700;font-size:16px;color:var(--teal-dk)}
+
+.rows{margin-top:20px;border-top:1px solid var(--line)}
+.row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);flex:0 0 auto}
+.row .val{font-size:14px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.row .val em{display:block;font-style:normal;font-size:12px;color:var(--ink-2);margin-top:3px}
+.row .alt{
+  margin-left:9px;border:0;background:none;cursor:pointer;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-dk);
+  text-decoration:underline;text-underline-offset:3px;padding:0;
+}
+.row.eco .val{color:var(--ambar-dk)}
+.row.total{border-bottom:0;padding-top:14px}
+.row.total .k{color:var(--ink-2)}
+.row.total .val{font-family:var(--mono);font-weight:500;font-size:20px;color:var(--navy);letter-spacing:-.01em}
+
+.paylab{margin-top:16px;font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.pay{margin-top:9px;display:grid;gap:8px}
+.pay label{
+  display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:12px;cursor:pointer;
+  box-shadow:inset 0 0 0 1px var(--line);font-size:14px;color:var(--ink);
+  transition:box-shadow .2s var(--ease), background-color .2s var(--ease);
+}
+.pay label:hover{box-shadow:inset 0 0 0 1px rgba(16,42,67,.28)}
+.pay input{accent-color:var(--teal);width:16px;height:16px;flex:0 0 auto}
+.pay label.on{box-shadow:inset 0 0 0 1.6px var(--teal);background:rgba(11,158,165,.05)}
+.pay .tag{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+
+.sheet .btn-block{margin-top:18px}
+.sheet .fine{margin-top:11px;font-size:12px;line-height:1.4;color:var(--ink-2);text-align:center}
+.sheet .proto{margin-top:12px;text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+
+/* ---------- revelações discretas ---------- */
+
+/* usa `translate` (e não `transform`) para não conflitar com o realce do card Plus */
+.rev{opacity:0;translate:0 14px;transition:opacity .7s var(--ease), translate .7s var(--ease)}
+.rev.in{opacity:1;translate:0 0}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation-duration:.01ms !important;transition-duration:.06s !important}
+  .rev{opacity:1;translate:0 0}
+}
+</style>
+</head>
+
+<body>
+<div class="bg-light" aria-hidden="true"></div>
+<div class="bg-grain" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <header class="top">
+    <a href="emocao.html" aria-label="Notecar — início">
+      <svg class="logo" viewBox="0 0 529 126" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Notecar" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"> <g transform="matrix(1,0,0,1,-74.722711,-361.361306)"> <g transform="matrix(1,0,0,1,-1278.600679,-124.406589)"> <g> <g transform="matrix(3.496087,0,0,3.496087,935.205528,-1763.46096)"> <path d="M245.091,660.513C244.991,659.146 244.608,658.029 243.941,657.163C243.274,656.296 242.008,655.863 240.141,655.863C238.708,655.863 237.608,656.088 236.841,656.538C236.074,656.988 235.549,657.571 235.266,658.288C234.983,659.004 234.841,659.746 234.841,660.513L227.391,660.513C227.391,658.613 227.891,656.813 228.891,655.113C229.891,653.413 231.341,652.029 233.241,650.963C235.141,649.896 237.441,649.363 240.141,649.363C243.808,649.363 246.658,650.354 248.691,652.338C250.724,654.321 251.891,657.046 252.191,660.512L252.241,678.163L245.091,678.163L245.091,675.463C244.324,676.529 243.283,677.379 241.966,678.013C240.649,678.646 239.258,678.963 237.791,678.963C235.958,678.963 234.333,678.621 232.916,677.938C231.499,677.254 230.383,676.263 229.566,674.963C228.749,673.663 228.341,672.079 228.341,670.213C228.341,668.046 228.858,666.329 229.891,665.063C230.924,663.796 232.283,662.846 233.966,662.213C235.649,661.579 237.466,661.146 239.416,660.913C241.366,660.679 243.258,660.546 245.091,660.513L245.091,660.513L245.091,660.513ZM245.091,666.613C241.791,666.546 239.416,666.788 237.966,667.338C236.516,667.888 235.791,668.779 235.791,670.013C235.791,670.913 236.133,671.546 236.816,671.913C237.499,672.279 238.291,672.463 239.191,672.463C240.058,672.463 240.949,672.329 241.866,672.063C242.783,671.796 243.549,671.279 244.166,670.513C244.783,669.746 245.091,668.613 245.091,667.113L245.091,666.613ZM261.891,664.463L261.891,678.163L254.741,678.163L254.741,650.163L261.891,650.163L261.891,654.426C262.074,653.956 262.299,653.493 262.566,653.038C263.183,651.988 264.141,651.113 265.441,650.413C266.741,649.713 268.508,649.363 270.741,649.363L270.741,656.363C268.774,656.363 267.133,656.579 265.816,657.013C264.499,657.446 263.516,658.238 262.866,659.388C262.216,660.538 261.891,662.229 261.891,664.463Z" style="fill:rgb(70,181,185);"/> </g> <g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"> <path d="M241.885,671.677C242.905,671.594 243.757,671.319 244.441,670.855C245.274,670.288 245.891,669.546 246.291,668.63C246.691,667.713 246.891,666.721 246.891,665.655L254.341,665.655C254.341,668.055 253.791,670.205 252.691,672.105C251.591,674.005 250.058,675.496 248.091,676.58C246.299,677.567 244.23,678.104 241.885,678.192L241.885,671.677Z" style="fill:rgb(70,181,186);"/> </g> <g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"> <path d="M241.885,648.619C244.137,648.712 246.156,649.266 247.941,650.28C249.908,651.396 251.449,652.846 252.566,654.63C253.683,656.413 254.241,658.338 254.241,660.405L246.691,660.405C246.691,659.505 246.508,658.655 246.141,657.855C245.774,657.055 245.191,656.396 244.391,655.88C243.735,655.456 242.899,655.206 241.885,655.13L241.885,648.619Z" style="fill:rgb(70,181,186);"/> </g> </g> <g> <g transform="matrix(3.496087,0,0,3.496087,578.27288,-1760.133869)"> <path d="M266.991,678.205C264.124,678.205 261.616,677.58 259.466,676.33C257.316,675.08 255.649,673.338 254.466,671.105C253.283,668.871 252.691,666.321 252.691,663.455C252.691,660.555 253.283,657.988 254.466,655.755C255.649,653.521 257.316,651.771 259.466,650.505C261.616,649.238 264.133,648.605 267.016,648.605C269.899,648.605 272.408,649.238 274.541,650.505C276.674,651.771 278.333,653.521 279.516,655.755C280.699,657.988 281.291,660.555 281.291,663.455C281.291,666.321 280.699,668.871 279.516,671.105C278.333,673.338 276.674,675.08 274.541,676.33C272.408,677.58 269.891,678.205 266.991,678.205ZM267.016,671.805C268.633,671.805 269.949,671.43 270.966,670.68C271.983,669.93 272.741,668.921 273.241,667.655C273.741,666.388 273.991,664.985 273.991,663.446C273.991,661.885 273.741,660.463 273.241,659.18C272.741,657.896 271.983,656.88 270.966,656.13C269.949,655.38 268.633,655.005 267.016,655.005C265.399,655.005 264.074,655.38 263.041,656.13C262.008,656.88 261.241,657.896 260.741,659.18C260.241,660.463 259.991,661.885 259.991,663.446C259.991,664.985 260.241,666.388 260.741,667.655C261.241,668.921 262.008,669.93 263.041,670.68C264.074,671.43 265.399,671.805 267.016,671.805Z" style="fill:rgb(16,42,67);fill-rule:nonzero;"/> <path d="M288.907,677.405C286.385,677.405 284.341,675.36 284.341,672.838C284.341,663.356 284.341,642.405 284.341,642.405L291.491,642.405L291.491,671.305L293.125,671.305C294.336,671.305 295.497,671.786 296.353,672.642C297.21,673.498 297.691,674.66 297.691,675.871L297.691,675.97C297.691,676.762 297.049,677.405 296.256,677.405C294.51,677.405 291.476,677.405 288.907,677.405ZM281.141,655.505L281.141,649.405L296.891,649.405L296.891,655.505L281.141,655.505Z" style="fill:rgb(16,42,67);fill-rule:nonzero;"/> </g> <g transform="matrix(3.496087,0,0,3.496087,419.725353,-1760.133869)"> <path d="M274.041,651.563L274.041,677.405L267.041,677.405L267.041,642.405L273.59,642.405C276.12,642.405 278.417,643.878 279.471,646.177C282.76,653.35 289.591,668.246 289.591,668.246L289.591,642.405L296.591,642.405L296.591,677.405L290.041,677.405C287.512,677.405 285.215,675.931 284.161,673.632C280.872,666.459 274.041,651.563 274.041,651.563Z" style="fill:rgb(16,42,67);"/> </g> <g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"> <path d="M239.443,678.123C237.293,677.916 235.367,677.319 233.666,676.33C231.516,675.08 229.849,673.338 228.666,671.105C227.483,668.871 226.891,666.321 226.891,663.455C226.891,660.555 227.483,657.988 228.666,655.755C229.849,653.521 231.516,651.771 233.666,650.505C235.367,649.502 237.293,648.896 239.443,648.687L239.443,655.255C238.526,655.426 237.742,655.742 237.091,656.205C236.058,656.938 235.316,657.938 234.866,659.205C234.416,660.471 234.191,661.888 234.191,663.455C234.191,664.988 234.416,666.38 234.866,667.63C235.316,668.88 236.058,669.871 237.091,670.605C237.742,671.067 238.526,671.383 239.443,671.554L239.443,678.123Z" style="fill:rgb(16,42,67);"/> </g> <g transform="matrix(1.254545,0,0,1.254545,-130.04479,-122.954)"> <path d="M1437.157,536.836C1437.677,536.836 1438.099,537.257 1438.099,537.777L1438.099,545.215C1438.099,546.775 1436.834,548.039 1435.274,548.039L1427.837,548.039C1427.317,548.039 1426.895,547.618 1426.895,547.098L1426.895,539.66C1426.895,538.1 1428.16,536.836 1429.719,536.836L1437.157,536.836Z" style="fill:rgb(16,42,67);"/> </g> </g> </g> </g> </svg>
+    </a>
+    <a class="back" href="emocao.html">← <span class="lg">a história do seu carro</span><span class="sm">voltar</span></a>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <p class="eyebrow rev">Planos e assinatura</p>
+    <h1 class="h1 rev">Escolha como você quer cuidar dos seus veículos.</h1>
+    <p class="lead rev">Comece grátis ou tenha mais veículos, mais recursos e uma experiência sem anúncios.</p>
+    <p class="note rev">Cancele quando quiser. <b>Seu histórico continua sendo seu.</b></p>
+  </section>
+
+  <!-- régua de hodômetro -->
+  <div class="ruler" aria-hidden="true"><div class="track" id="track"></div></div>
+
+  <!-- ================= SELETOR DE COBRANÇA ================= -->
+  <div class="billing rev">
+    <div class="seg" role="radiogroup" aria-label="Periodicidade da cobrança">
+      <span class="knob" id="knob" aria-hidden="true"></span>
+      <button type="button" role="radio" aria-checked="false" data-cycle="m" id="segM">Mensal</button>
+      <button type="button" role="radio" aria-checked="true"  data-cycle="y" id="segY">Anual</button>
+    </div>
+    <span class="save" id="save">Economize no plano anual</span>
+  </div>
+
+  <!-- ================= PLANOS ================= -->
+  <section class="plans" aria-label="Planos do Notecar">
+
+    <!-- FREE -->
+    <article class="plan free rev" data-plan="free" tabindex="0">
+      <div class="win">
+        <p class="name">Notecar Free</p>
+        <p class="price"><span class="cur">R$</span><span class="val">0</span></p>
+        <p class="eq">Para sempre</p>
+      </div>
+      <div class="strip">
+        <p class="hand">meu carro</p>
+        <p class="desc">Para começar a construir a história do seu carro.</p>
+        <p class="incl">Inclui</p>
+        <ul class="feats">
+          <li>1 veículo</li>
+          <li>1 usuário</li>
+          <li>Registros de manutenção</li>
+          <li>Histórico do veículo</li>
+          <li>Controle de quilometragem</li>
+          <li>Lembretes básicos</li>
+          <li>Compartilhamento do histórico</li>
+          <li>Transferência do histórico para um novo proprietário</li>
+          <li class="n">Anúncios discretos somente na Home</li>
+        </ul>
+        <button class="btn btn-gh btn-block" type="button" data-cta="free">Começar grátis</button>
+      </div>
+    </article>
+
+    <!-- PLUS -->
+    <article class="plan plus rev" data-plan="plus" tabindex="0">
+      <span class="badge">Mais escolhido</span>
+      <div class="win">
+        <p class="name">Notecar Plus</p>
+        <p class="price"><span class="cur">R$</span><span class="val" data-price="plus">89,90</span><span class="per" data-per="plus">/ano</span></p>
+        <p class="eq" data-eq="plus">Equivale a <b>R$ 7,49/mês</b></p>
+      </div>
+      <div class="strip">
+        <p class="hand">meus veículos</p>
+        <p class="desc">Para quem quer cuidar e documentar tudo sobre seus veículos.</p>
+        <p class="incl">Tudo do Free, mais</p>
+        <ul class="feats">
+          <li>Até 3 veículos</li>
+          <li>Sem anúncios</li>
+          <li>Documentos e anexos ampliados</li>
+          <li>Recursos premium</li>
+          <li>Relatórios e exportações</li>
+          <li>Experiência completa do Notecar</li>
+        </ul>
+        <p class="fine">Limites de anexos, relatórios e exportações conforme a configuração do produto.</p>
+        <button class="btn btn-pri btn-block" type="button" data-cta="plus">Assinar Notecar Plus</button>
+      </div>
+    </article>
+
+    <!-- FAMÍLIA -->
+    <article class="plan fam rev" data-plan="familia" tabindex="0">
+      <div class="win">
+        <p class="name">Notecar Família</p>
+        <p class="price"><span class="cur">R$</span><span class="val" data-price="familia">139,90</span><span class="per" data-per="familia">/ano</span></p>
+        <p class="eq" data-eq="familia">Equivale a <b>R$ 11,66/mês</b></p>
+      </div>
+      <div class="strip">
+        <p class="hand">nossos veículos</p>
+        <p class="desc">Para quem cuida de mais veículos e compartilha essa responsabilidade com a família.</p>
+        <p class="incl">Tudo do Plus, mais</p>
+        <ul class="feats">
+          <li>Até 5 veículos</li>
+          <li>Até 4 usuários dependentes</li>
+          <li>Garagem compartilhada</li>
+          <li>Acesso aos veículos autorizados</li>
+          <li>Histórico compartilhado entre os usuários responsáveis</li>
+          <li>Gestão familiar dos veículos</li>
+        </ul>
+        <button class="btn btn-gh btn-block" type="button" data-cta="familia">Assinar Notecar Família</button>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ================= COMPARAÇÃO RÁPIDA ================= -->
+  <section class="compare rev">
+    <div class="head">
+      <h2 class="h2">Comparação rápida</h2>
+      <p class="micro">Free = meu carro · Plus = meus veículos · Família = nossos veículos</p>
+    </div>
+    <div class="table-wrap">
+      <table class="cmp">
+        <colgroup><col class="lab"><col class="pl"><col class="pl"><col class="pl"></colgroup>
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Free</th>
+            <th scope="col" class="p">Plus</th>
+            <th scope="col">Família</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Veículos</th>
+            <td class="v">1</td><td class="p v">até 3</td><td class="v">até 5</td>
+          </tr>
+          <tr>
+            <th scope="row">Usuários</th>
+            <td class="v">1</td><td class="p v">1</td><td class="v">até 4 dependentes</td>
+          </tr>
+          <tr>
+            <th scope="row">Histórico</th>
+            <td class="yes">✓</td><td class="p yes">✓</td><td class="yes">✓</td>
+          </tr>
+          <tr>
+            <th scope="row">Manutenções</th>
+            <td class="yes">✓</td><td class="p yes">✓</td><td class="yes">✓</td>
+          </tr>
+          <tr>
+            <th scope="row">Transferência do histórico</th>
+            <td class="yes">✓</td><td class="p yes">✓</td><td class="yes">✓</td>
+          </tr>
+          <tr>
+            <th scope="row">Anúncios</th>
+            <td>Sim</td><td class="p">Não</td><td>Não</td>
+          </tr>
+          <tr>
+            <th scope="row">Recursos premium</th>
+            <td class="no">—</td><td class="p yes">✓</td><td class="yes">✓</td>
+          </tr>
+          <tr>
+            <th scope="row">Garagem compartilhada</th>
+            <td class="no">—</td><td class="p no">—</td><td class="yes">✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= REFORÇO DE VALOR ================= -->
+  <section class="value rev">
+    <h2 class="h2">Um pequeno valor para preservar uma grande história.</h2>
+    <p class="lead">Revisões, serviços, peças, documentos e cuidados ficam organizados em um único lugar — hoje e quando chegar a hora de passar o veículo adiante.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <h3>Organize</h3>
+        <p>Tudo o que acontece com seu veículo.</p>
+      </div>
+      <div class="pillar">
+        <h3>Comprove</h3>
+        <p>Como ele foi cuidado ao longo do tempo.</p>
+      </div>
+      <div class="pillar">
+        <h3>Compartilhe</h3>
+        <p>O histórico quando precisar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GARANTIAS ================= -->
+  <ul class="trust rev">
+    <li>Pagamento seguro</li>
+    <li>Assinatura cancelável</li>
+    <li>Histórico do veículo preservado</li>
+    <li>Dados protegidos</li>
+    <li>Transferência de histórico disponível mesmo no plano gratuito</li>
+  </ul>
+
+  <!-- ================= FAQ ================= -->
+  <section class="faq rev">
+    <h2 class="h2">Perguntas rápidas</h2>
+    <div class="faq-list" id="faq">
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">Posso usar o Notecar gratuitamente?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Sim. O plano Free permite cadastrar um veículo e utilizar os principais recursos de histórico e manutenção.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">O que acontece com meus registros se eu cancelar?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Os registros do veículo não são apagados simplesmente porque uma assinatura terminou. Recursos premium passam a seguir as regras do plano vigente.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">Posso transferir o histórico ao vender meu carro?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Sim. A transferência do histórico é parte central do Notecar e permanece disponível também para usuários do plano gratuito.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">Posso mudar de plano depois?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Sim, conforme as regras de upgrade e downgrade implementadas na plataforma.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">A assinatura vale para todos os meus veículos?<span class="pm" aria-hidden="true"></span></button>
+        <div class="faq-a"><p>Cada plano possui seu próprio limite de veículos.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CTA FINAL ================= -->
+  <section class="final rev">
+    <h2 class="h2">Comece hoje a construir a história do seu carro.</h2>
+    <div class="acts">
+      <button class="btn btn-gh" type="button" data-cta="free">Começar grátis</button>
+      <button class="btn btn-pri" type="button" data-cta="plus">Assinar Notecar Plus</button>
+    </div>
+    <p class="hand">Seu carro muda com o tempo. A história dele não precisa se perder.</p>
+  </section>
+
+  <footer>
+    <svg class="simb" viewBox="0 0 128 138" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"> <g transform="matrix(1,0,0,1,-40.678943,-182.686536)"> <g transform="matrix(1.375362,0,0,1.375362,-773.794119,-659.699792)"> <g> <g> <path d="M634.639,712.324L597.295,674.98C594.025,671.71 592.188,667.275 592.188,662.651C592.188,658.027 594.025,653.592 597.295,650.322L634.639,612.978L634.639,633.558C631.435,634.156 628.694,635.263 626.416,636.879C622.804,639.443 620.211,642.939 618.638,647.367C617.064,651.796 616.278,656.749 616.278,662.226C616.278,667.586 617.064,672.452 618.638,676.822C620.211,681.192 622.804,684.659 626.416,687.223C628.694,688.839 631.435,689.946 634.639,690.543L634.639,712.324Z" style="fill:rgb(16,42,67);"/> <path d="M637.369,654.104C638.021,654.104 638.55,654.633 638.55,655.285L638.55,664.616C638.55,666.573 636.964,668.16 635.007,668.16L625.676,668.16C625.023,668.16 624.495,667.631 624.495,666.979L624.495,657.648C624.495,655.691 626.081,654.104 628.038,654.104L637.369,654.104Z" style="fill:rgb(16,42,67);"/> </g> <g> <path d="M682.142,651.563L659.979,651.563C659.979,648.416 659.338,645.445 658.056,642.648C656.774,639.851 654.735,637.549 651.938,635.743C649.644,634.262 646.724,633.388 643.176,633.121L643.176,612.483L681.015,650.322C681.412,650.719 681.788,651.133 682.142,651.563Z" style="fill:rgb(70,181,186);"/> <g> <path d="M643.176,712.819L643.176,690.973C646.744,690.681 649.722,689.722 652.113,688.097C655.026,686.116 657.182,683.523 658.58,680.318C659.979,677.113 660.678,673.646 660.678,669.917L684.536,669.917C683.681,671.783 682.495,673.501 681.015,674.98L643.176,712.819Z" style="fill:rgb(70,181,186);"/> </g> </g> </g> </g> </g> </svg>
+    <p class="micro">Notecar · o prontuário do seu carro</p>
+  </footer>
+
+</div><!-- /wrap -->
+
+<!-- ================= CTA STICKY (MOBILE) ================= -->
+<div class="sticky" id="sticky" role="region" aria-label="Plano selecionado">
+  <div class="info">
+    <p class="n" id="stName">Notecar Plus</p>
+    <p class="p" id="stPrice">R$ 89,90/ano</p>
+  </div>
+  <button class="btn btn-pri" type="button" id="stBtn">Assinar</button>
+</div>
+
+<!-- ================= CHECKOUT ================= -->
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ckName" hidden>
+  <div class="sheet" id="sheet">
+    <div class="grip" aria-hidden="true"></div>
+    <div class="hd">
+      <button class="close" type="button" id="ckClose" aria-label="Fechar">fechar</button>
+      <p class="chose">Você escolheu</p>
+      <p class="pn" id="ckName">Notecar Plus</p>
+      <p class="ph" id="ckHand">meus veículos</p>
+    </div>
+
+    <div class="rows">
+      <div class="row">
+        <span class="k">Periodicidade</span>
+        <span class="val"><span id="ckCycle">Anual</span><button class="alt" type="button" id="ckAlt">alterar</button></span>
+      </div>
+      <div class="row">
+        <span class="k">Valor</span>
+        <span class="val"><span id="ckValue">R$ 89,90 por ano</span><em id="ckEq">Equivalente a R$ 7,49/mês</em></span>
+      </div>
+      <div class="row eco" id="ckEcoRow">
+        <span class="k">Economia anual</span>
+        <span class="val" id="ckEco">R$ 28,90</span>
+      </div>
+      <div class="row total">
+        <span class="k">Total da cobrança</span>
+        <span class="val" id="ckTotal">R$ 89,90</span>
+      </div>
+    </div>
+
+    <p class="paylab">Forma de pagamento</p>
+    <div class="pay" id="pay">
+      <label class="on"><input type="radio" name="pg" value="cartao" checked>Cartão de crédito<span class="tag">recorrente</span></label>
+      <label><input type="radio" name="pg" value="pix">PIX<span class="tag">à vista</span></label>
+    </div>
+
+    <button class="btn btn-pri btn-block" type="button" id="ckConfirm">Confirmar assinatura</button>
+    <p class="fine">Você poderá cancelar sua assinatura de acordo com as regras da plataforma de pagamento utilizada.</p>
+    <p class="proto">Protótipo · nenhuma cobrança é realizada</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- dados dos planos (briefing) ---------------- */
+  var PLANS = {
+    free:    { name:'Notecar Free',    hand:'meu carro' },
+    plus:    { name:'Notecar Plus',    hand:'meus veículos',  m:9.90,  y:89.90,  eq:'7,49'  },
+    familia: { name:'Notecar Família', hand:'nossos veículos', m:14.90, y:139.90, eq:'11,66' }
+  };
+  var brl = function(v){ return v.toFixed(2).replace('.', ','); };
+
+  var cycle = 'y';          // anual em destaque desde o início
+  var selected = null;      // plano selecionado pelo usuário
+
+  /* ---------------- régua de hodômetro ---------------- */
+  var track = document.getElementById('track');
+  function buildRuler(){
+    var w = track.parentElement.clientWidth;
+    if(!w) return;
+    var gap = 17, minor = 1000, major = 10000, start = 62000;
+    var n = Math.ceil(w/gap) + 2, frag = document.createDocumentFragment();
+    for(var i=0;i<n;i++){
+      var km = start + i*minor, isMajor = km % major === 0;
+      var t = document.createElement('div');
+      t.className = 'tick ' + (isMajor ? 'major' : 'minor');
+      t.style.left = (i*gap) + 'px';
+      frag.appendChild(t);
+      if(isMajor){
+        var l = document.createElement('div');
+        l.className = 'tick-label';
+        l.style.left = (i*gap) + 'px';
+        l.textContent = km.toLocaleString('pt-BR');
+        frag.appendChild(l);
+      }
+    }
+    track.replaceChildren(frag);
+  }
+  buildRuler();
+
+  /* ---------------- seletor mensal / anual ---------------- */
+  var segM = document.getElementById('segM'),
+      segY = document.getElementById('segY'),
+      knob = document.getElementById('knob'),
+      save = document.getElementById('save');
+
+  function moveKnob(){
+    var b = cycle === 'y' ? segY : segM;
+    knob.style.width = b.offsetWidth + 'px';
+    knob.style.transform = 'translateX(' + b.offsetLeft + 'px)';
+  }
+
+  function priceOf(key){
+    var p = PLANS[key];
+    return cycle === 'y' ? p.y : p.m;
+  }
+
+  function renderPrices(animate){
+    ['plus','familia'].forEach(function(key){
+      var p = PLANS[key];
+      var val = document.querySelector('[data-price="'+key+'"]');
+      var per = document.querySelector('[data-per="'+key+'"]');
+      var eq  = document.querySelector('[data-eq="'+key+'"]');
+      val.textContent = brl(priceOf(key));
+      per.textContent = cycle === 'y' ? '/ano' : '/mês';
+      eq.innerHTML = cycle === 'y'
+        ? 'Equivale a <b>R$ ' + p.eq + '/mês</b>'
+        : 'Cobrado mensalmente';
+      if(animate && !REDUCED){
+        [val,per,eq].forEach(function(el){
+          el.classList.remove('swap');
+          void el.offsetWidth;
+          el.classList.add('swap');
+        });
+      }
+    });
+    save.classList.toggle('dim', cycle !== 'y');
+    segM.setAttribute('aria-checked', cycle === 'm');
+    segY.setAttribute('aria-checked', cycle === 'y');
+    moveKnob();
+    syncSticky();
+    if(document.getElementById('ov').classList.contains('on')) renderCheckout();
+  }
+
+  function setCycle(c, animate){
+    if(c === cycle) return;
+    cycle = c;
+    renderPrices(animate !== false);
+  }
+  segM.addEventListener('click', function(){ setCycle('m'); });
+  segY.addEventListener('click', function(){ setCycle('y'); });
+
+  /* ---------------- seleção de plano + sticky ---------------- */
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.plan'));
+  var sticky = document.getElementById('sticky'),
+      stName = document.getElementById('stName'),
+      stPrice = document.getElementById('stPrice'),
+      stBtn = document.getElementById('stBtn');
+
+  function select(key){
+    selected = key;
+    cards.forEach(function(c){ c.classList.toggle('sel', c.dataset.plan === key); });
+    syncSticky();
+  }
+
+  function syncSticky(){
+    if(!selected || selected === 'free'){ sticky.classList.remove('on'); return; }
+    var p = PLANS[selected];
+    stName.textContent = p.name;
+    stPrice.textContent = 'R$ ' + brl(priceOf(selected)) + (cycle === 'y' ? '/ano' : '/mês');
+    stBtn.textContent = 'Assinar';
+    sticky.classList.add('on');
+  }
+
+  cards.forEach(function(card){
+    card.addEventListener('click', function(){ select(card.dataset.plan); });
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); select(card.dataset.plan); }
+    });
+  });
+
+  /* ---------------- checkout ---------------- */
+  var ov = document.getElementById('ov'),
+      ckName = document.getElementById('ckName'),
+      ckHand = document.getElementById('ckHand'),
+      ckCycle = document.getElementById('ckCycle'),
+      ckValue = document.getElementById('ckValue'),
+      ckEq = document.getElementById('ckEq'),
+      ckEco = document.getElementById('ckEco'),
+      ckEcoRow = document.getElementById('ckEcoRow'),
+      ckTotal = document.getElementById('ckTotal'),
+      ckAlt = document.getElementById('ckAlt'),
+      ckConfirm = document.getElementById('ckConfirm'),
+      lastFocus = null;
+
+  function renderCheckout(){
+    var key = selected && selected !== 'free' ? selected : 'plus';
+    var p = PLANS[key];
+    ckName.textContent = p.name;
+    ckHand.textContent = p.hand;
+    ckCycle.textContent = cycle === 'y' ? 'Anual' : 'Mensal';
+    if(cycle === 'y'){
+      ckValue.textContent = 'R$ ' + brl(p.y) + ' por ano';
+      ckEq.textContent = 'Equivalente a R$ ' + p.eq + '/mês';
+      ckEq.hidden = false;
+      ckEco.textContent = 'R$ ' + brl(p.m * 12 - p.y);
+      ckEcoRow.hidden = false;
+      ckTotal.textContent = 'R$ ' + brl(p.y);
+    } else {
+      ckValue.textContent = 'R$ ' + brl(p.m) + ' por mês';
+      ckEq.textContent = '';
+      ckEq.hidden = true;
+      ckEco.textContent = '';
+      ckEcoRow.hidden = true;
+      ckTotal.textContent = 'R$ ' + brl(p.m);
+    }
+    ckConfirm.textContent = 'Confirmar assinatura';
+    ckConfirm.disabled = false;
+  }
+
+  function openCheckout(key){
+    if(key) select(key);
+    renderCheckout();
+    lastFocus = document.activeElement;
+    ov.hidden = false;
+    requestAnimationFrame(function(){ ov.classList.add('on'); });
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ ckConfirm.focus({preventScroll:true}); }, 220);
+  }
+  function closeCheckout(){
+    ov.classList.remove('on');
+    document.body.style.overflow = '';
+    setTimeout(function(){ ov.hidden = true; }, 300);
+    if(lastFocus) lastFocus.focus({preventScroll:true});
+  }
+
+  document.getElementById('ckClose').addEventListener('click', closeCheckout);
+  ov.addEventListener('click', function(e){ if(e.target === ov) closeCheckout(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && ov.classList.contains('on')) closeCheckout(); });
+  ckAlt.addEventListener('click', function(){ setCycle(cycle === 'y' ? 'm' : 'y'); });
+  stBtn.addEventListener('click', function(){ openCheckout(selected); });
+  ckConfirm.addEventListener('click', function(){
+    ckConfirm.textContent = 'Aguardando integração de pagamento';
+    ckConfirm.disabled = true;
+  });
+
+  document.querySelectorAll('[data-cta]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var key = btn.dataset.cta;
+      if(key === 'free'){ select('free'); return; }
+      openCheckout(key);
+    });
+  });
+
+  /* forma de pagamento */
+  var pay = document.getElementById('pay');
+  pay.addEventListener('change', function(){
+    pay.querySelectorAll('label').forEach(function(l){
+      l.classList.toggle('on', l.querySelector('input').checked);
+    });
+  });
+
+  /* ---------------- FAQ ---------------- */
+  document.querySelectorAll('.faq-q').forEach(function(q){
+    var a = q.nextElementSibling;
+    q.addEventListener('click', function(){
+      var open = q.getAttribute('aria-expanded') === 'true';
+      document.querySelectorAll('.faq-q').forEach(function(o){
+        if(o !== q && o.getAttribute('aria-expanded') === 'true'){
+          o.setAttribute('aria-expanded','false');
+          o.nextElementSibling.style.height = '0px';
+        }
+      });
+      q.setAttribute('aria-expanded', String(!open));
+      a.style.height = open ? '0px' : a.firstElementChild.offsetHeight + 'px';
+    });
+  });
+
+  /* ---------------- revelações discretas ---------------- */
+  if('IntersectionObserver' in window && !REDUCED){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:.08});
+    document.querySelectorAll('.rev').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.rev').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------------- resize ---------------- */
+  var t;
+  window.addEventListener('resize', function(){
+    clearTimeout(t);
+    t = setTimeout(function(){
+      buildRuler(); moveKnob();
+      document.querySelectorAll('.faq-q[aria-expanded="true"]').forEach(function(q){
+        q.nextElementSibling.style.height = q.nextElementSibling.firstElementChild.offsetHeight + 'px';
+      });
+    }, 140);
+  });
+
+  /* ---------------- estado inicial ---------------- */
+  document.fonts && document.fonts.ready.then(function(){ buildRuler(); moveKnob(); });
+  renderPrices(false);
+})();
+</script>
+</body>
+</html>

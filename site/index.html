@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Notecar — razão e emoção</title>
+<meta name="description" content="Seu carro é razão e emoção. O Notecar também. Escolha como quer começar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Glory:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playpen+Sans:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   Notecar — página de escolha  ·  mobile-first
+   Só as palavras. Grafismo circular discreto ao fundo.
+   ============================================================ */
+:root{
+  --navy:#102A43;
+  --teal-dk:#0E6474; --teal-md:#46B5BA;
+  --laranja:#E8503A; --laranja-dk:#C0402C;
+  --paper:#F1EFEA;
+  --ink2:#34434E; --ink3:#7B8894;
+  --d:'Glory',system-ui,-apple-system,sans-serif;
+  --m:'JetBrains Mono',ui-monospace,monospace;
+  --p:'Playpen Sans','Segoe Print',cursive;
+  --e:cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);color:var(--navy);font-family:var(--d);
+  min-height:100dvh;position:relative;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg-light{background:radial-gradient(120% 62% at 50% 12%, rgba(255,255,255,.80), rgba(255,255,255,0) 70%)}
+.bg-grain{
+  opacity:.04;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.palco{
+  position:relative;z-index:1;min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + 40px) 20px calc(env(safe-area-inset-bottom,0px) + 40px);
+  text-align:center;
+}
+
+.logo{width:150px;height:auto;display:block;animation:sobe .9s var(--e) both}
+
+/* ── chamada ── */
+.l1{
+  margin-top:32px;max-width:19ch;
+  font-family:var(--d);font-weight:500;font-size:19px;line-height:1.32;
+  color:var(--ink2);text-wrap:balance;
+  animation:sobe .9s var(--e) .10s both;
+}
+.l1 b{font-weight:700;color:var(--navy)}
+.l2{
+  margin-top:7px;font-family:var(--p);font-weight:700;font-size:27px;line-height:1.15;
+  color:var(--teal-dk);transform:rotate(-1.4deg);
+  animation:sobe .9s var(--e) .18s both;
+}
+.l3{
+  margin-top:20px;font-family:var(--d);font-weight:400;font-size:14.5px;line-height:1.4;
+  color:var(--ink3);
+  animation:sobe .9s var(--e) .26s both;
+}
+
+/* ── as duas palavras ── */
+.escolha{
+  position:relative;margin-top:34px;margin-bottom:clamp(56px,15vw,84px);
+  display:flex;align-items:center;justify-content:center;gap:clamp(11px,3.8vw,26px);
+  animation:sobe 1s var(--e) .34s both;
+}
+.dial{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(84vw,320px);aspect-ratio:1/1;pointer-events:none;z-index:0;
+}
+.dial svg{width:100%;height:100%;display:block;overflow:visible}
+
+.p{
+  position:relative;z-index:1;display:block;text-decoration:none;
+  font-family:var(--d);font-weight:700;font-size:clamp(24px,7.2vw,32px);line-height:1;
+  letter-spacing:.02em;text-transform:uppercase;color:var(--navy);
+  padding:10px 2px 12px;
+  transition:color .35s var(--e), transform .35s var(--e);
+}
+.p::after{
+  content:"";position:absolute;left:50%;bottom:2px;width:0;height:2px;border-radius:2px;
+  transform:translateX(-50%);transition:width .4s var(--e);
+}
+.p.raz::after{background:var(--teal-dk)}
+.p.emo::after{background:var(--laranja)}
+.p.raz:hover,.p.raz:focus-visible{color:var(--teal-dk);outline:none}
+.p.emo:hover,.p.emo:focus-visible{color:var(--laranja-dk);outline:none}
+.p:hover::after,.p:focus-visible::after{width:100%}
+
+.risco{
+  position:relative;z-index:1;width:1px;height:26px;
+  background:linear-gradient(180deg,rgba(16,42,67,0),rgba(16,42,67,.22),rgba(16,42,67,0));
+}
+
+/* o mostrador reage à palavra sob o cursor */
+#arcoRaz,#arcoEmo{opacity:0;transition:opacity .45s var(--e)}
+.escolha:has(.raz:hover) #arcoRaz,
+.escolha:has(.raz:focus-visible) #arcoRaz{opacity:.55}
+.escolha:has(.emo:hover) #arcoEmo,
+.escolha:has(.emo:focus-visible) #arcoEmo{opacity:.55}
+
+@keyframes sobe{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.l2{animation-name:sobeGirado}
+@keyframes sobeGirado{from{opacity:0;transform:translateY(9px) rotate(-1.4deg)}to{opacity:1;transform:rotate(-1.4deg)}}
+
+/* ── telas maiores ── */
+@media (min-width:720px){
+  .logo{width:176px}
+  .l1{margin-top:38px;font-size:26px;max-width:24ch}
+  .l2{font-size:38px;margin-top:9px}
+  .l3{margin-top:24px;font-size:16.5px}
+  .escolha{margin-top:46px;margin-bottom:96px;gap:40px}
+  .dial{width:430px}
+  .p{font-size:42px;padding:14px 4px 16px}
+  .risco{height:34px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+
+<body>
+<div class="bg bg-light" aria-hidden="true"></div>
+<div class="bg bg-grain" aria-hidden="true"></div>
+
+<main class="palco">
+
+  <svg class="logo" viewBox="0 0 529 126" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Notecar"><g transform="matrix(1,0,0,1,-74.722711,-361.361306)"><g transform="matrix(1,0,0,1,-1278.600679,-124.406589)"><g><g transform="matrix(3.496087,0,0,3.496087,935.205528,-1763.46096)"><path d="M245.091,660.513C244.991,659.146 244.608,658.029 243.941,657.163C243.274,656.296 242.008,655.863 240.141,655.863C238.708,655.863 237.608,656.088 236.841,656.538C236.074,656.988 235.549,657.571 235.266,658.288C234.983,659.004 234.841,659.746 234.841,660.513L227.391,660.513C227.391,658.613 227.891,656.813 228.891,655.113C229.891,653.413 231.341,652.029 233.241,650.963C235.141,649.896 237.441,649.363 240.141,649.363C243.808,649.363 246.658,650.354 248.691,652.338C250.724,654.321 251.891,657.046 252.191,660.512L252.241,678.163L245.091,678.163L245.091,675.463C244.324,676.529 243.283,677.379 241.966,678.013C240.649,678.646 239.258,678.963 237.791,678.963C235.958,678.963 234.333,678.621 232.916,677.938C231.499,677.254 230.383,676.263 229.566,674.963C228.749,673.663 228.341,672.079 228.341,670.213C228.341,668.046 228.858,666.329 229.891,665.063C230.924,663.796 232.283,662.846 233.966,662.213C235.649,661.579 237.466,661.146 239.416,660.913C241.366,660.679 243.258,660.546 245.091,660.513L245.091,660.513L245.091,660.513ZM245.091,666.613C241.791,666.546 239.416,666.788 237.966,667.338C236.516,667.888 235.791,668.779 235.791,670.013C235.791,670.913 236.133,671.546 236.816,671.913C237.499,672.279 238.291,672.463 239.191,672.463C240.058,672.463 240.949,672.329 241.866,672.063C242.783,671.796 243.549,671.279 244.166,670.513C244.783,669.746 245.091,668.613 245.091,667.113L245.091,666.613ZM261.891,664.463L261.891,678.163L254.741,678.163L254.741,650.163L261.891,650.163L261.891,654.426C262.074,653.956 262.299,653.493 262.566,653.038C263.183,651.988 264.141,651.113 265.441,650.413C266.741,649.713 268.508,649.363 270.741,649.363L270.741,656.363C268.774,656.363 267.133,656.579 265.816,657.013C264.499,657.446 263.516,658.238 262.866,659.388C262.216,660.538 261.891,662.229 261.891,664.463Z" fill="#46B5B9"/></g><g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"><path d="M241.885,671.677C242.905,671.594 243.757,671.319 244.441,670.855C245.274,670.288 245.891,669.546 246.291,668.63C246.691,667.713 246.891,666.721 246.891,665.655L254.341,665.655C254.341,668.055 253.791,670.205 252.691,672.105C251.591,674.005 250.058,675.496 248.091,676.58C246.299,677.567 244.23,678.104 241.885,678.192L241.885,671.677Z" fill="#46B5BA"/></g><g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"><path d="M241.885,648.619C244.137,648.712 246.156,649.266 247.941,650.28C249.908,651.396 251.449,652.846 252.566,654.63C253.683,656.413 254.241,658.338 254.241,660.405L246.691,660.405C246.691,659.505 246.508,658.655 246.141,657.855C245.774,657.055 245.191,656.396 244.391,655.88C243.735,655.456 242.899,655.206 241.885,655.13L241.885,648.619Z" fill="#46B5BA"/></g></g><g><g transform="matrix(3.496087,0,0,3.496087,578.27288,-1760.133869)"><path d="M266.991,678.205C264.124,678.205 261.616,677.58 259.466,676.33C257.316,675.08 255.649,673.338 254.466,671.105C253.283,668.871 252.691,666.321 252.691,663.455C252.691,660.555 253.283,657.988 254.466,655.755C255.649,653.521 257.316,651.771 259.466,650.505C261.616,649.238 264.133,648.605 267.016,648.605C269.899,648.605 272.408,649.238 274.541,650.505C276.674,651.771 278.333,653.521 279.516,655.755C280.699,657.988 281.291,660.555 281.291,663.455C281.291,666.321 280.699,668.871 279.516,671.105C278.333,673.338 276.674,675.08 274.541,676.33C272.408,677.58 269.891,678.205 266.991,678.205ZM267.016,671.805C268.633,671.805 269.949,671.43 270.966,670.68C271.983,669.93 272.741,668.921 273.241,667.655C273.741,666.388 273.991,664.985 273.991,663.446C273.991,661.885 273.741,660.463 273.241,659.18C272.741,657.896 271.983,656.88 270.966,656.13C269.949,655.38 268.633,655.005 267.016,655.005C265.399,655.005 264.074,655.38 263.041,656.13C262.008,656.88 261.241,657.896 260.741,659.18C260.241,660.463 259.991,661.885 259.991,663.446C259.991,664.985 260.241,666.388 260.741,667.655C261.241,668.921 262.008,669.93 263.041,670.68C264.074,671.43 265.399,671.805 267.016,671.805Z" style="fill:rgb(16,42,67);fill-rule:nonzero;"/><path d="M288.907,677.405C286.385,677.405 284.341,675.36 284.341,672.838C284.341,663.356 284.341,642.405 284.341,642.405L291.491,642.405L291.491,671.305L293.125,671.305C294.336,671.305 295.497,671.786 296.353,672.642C297.21,673.498 297.691,674.66 297.691,675.871L297.691,675.97C297.691,676.762 297.049,677.405 296.256,677.405C294.51,677.405 291.476,677.405 288.907,677.405ZM281.141,655.505L281.141,649.405L296.891,649.405L296.891,655.505L281.141,655.505Z" style="fill:rgb(16,42,67);fill-rule:nonzero;"/></g><g transform="matrix(3.496087,0,0,3.496087,419.725353,-1760.133869)"><path d="M274.041,651.563L274.041,677.405L267.041,677.405L267.041,642.405L273.59,642.405C276.12,642.405 278.417,643.878 279.471,646.177C282.76,653.35 289.591,668.246 289.591,668.246L289.591,642.405L296.591,642.405L296.591,677.405L290.041,677.405C287.512,677.405 285.215,675.931 284.161,673.632C280.872,666.459 274.041,651.563 274.041,651.563Z" fill="#102A43"/></g><g transform="matrix(3.496087,0,0,3.496087,833.091455,-1760.841881)"><path d="M239.443,678.123C237.293,677.916 235.367,677.319 233.666,676.33C231.516,675.08 229.849,673.338 228.666,671.105C227.483,668.871 226.891,666.321 226.891,663.455C226.891,660.555 227.483,657.988 228.666,655.755C229.849,653.521 231.516,651.771 233.666,650.505C235.367,649.502 237.293,648.896 239.443,648.687L239.443,655.255C238.526,655.426 237.742,655.742 237.091,656.205C236.058,656.938 235.316,657.938 234.866,659.205C234.416,660.471 234.191,661.888 234.191,663.455C234.191,664.988 234.416,666.38 234.866,667.63C235.316,668.88 236.058,669.871 237.091,670.605C237.742,671.067 238.526,671.383 239.443,671.554L239.443,678.123Z" fill="#102A43"/></g><g transform="matrix(1.254545,0,0,1.254545,-130.04479,-122.954)"><path d="M1437.157,536.836C1437.677,536.836 1438.099,537.257 1438.099,537.777L1438.099,545.215C1438.099,546.775 1436.834,548.039 1435.274,548.039L1427.837,548.039C1427.317,548.039 1426.895,547.618 1426.895,547.098L1426.895,539.66C1426.895,538.1 1428.16,536.836 1429.719,536.836L1437.157,536.836Z" fill="#102A43"/></g></g></g></g></svg>
+
+  <h1 class="l1">Seu carro é <b>razão</b> e <b>emoção</b>.</h1>
+  <p class="l2">O Notecar também.</p>
+  <p class="l3">Escolha como quer começar.</p>
+
+  <nav class="escolha" aria-label="Escolha o caminho">
+    <div class="dial" aria-hidden="true">
+      <svg id="mostrador" viewBox="0 0 400 400"></svg>
+    </div>
+    <a class="p raz" href="razao.html">Razão</a>
+    <span class="risco" aria-hidden="true"></span>
+    <a class="p emo" href="emocao.html">Emoção</a>
+  </nav>
+
+</main>
+
+<script>
+/* mostrador — traços e números, bem discretos */
+(function(){
+  var svg = document.getElementById('mostrador');
+  if(!svg) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var cx = 200, cy = 196, R = 150;
+  var A0 = 164, A1 = 16;            /* escala embaixo das palavras */
+  var N  = 41;
+  var mk = function(t,a){ var e=document.createElementNS(NS,t); for(var k in a) e.setAttribute(k,a[k]); return e; };
+  var pol = function(ang,r){ var a=ang*Math.PI/180; return [cx+Math.cos(a)*r, cy+Math.sin(a)*r]; };
+  var arco = function(de,ate,r){
+    var p1=pol(de,r), p2=pol(ate,r);
+    var grande = Math.abs(ate-de) > 180 ? 1 : 0;
+    var sentido = ate > de ? 1 : 0;
+    return 'M'+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+' A'+r+' '+r+' 0 '+grande+' '+sentido+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1);
+  };
+
+  /* anel base */
+  svg.appendChild(mk('path',{d:arco(A0,A1,R), fill:'none', stroke:'#102A43', 'stroke-opacity':.10, 'stroke-width':1}));
+  svg.appendChild(mk('path',{d:arco(A0-7,A1+7,R-26), fill:'none', stroke:'#102A43', 'stroke-opacity':.05, 'stroke-width':1}));
+
+  /* metades que acendem com a palavra */
+  var meio = (A0+A1)/2;
+  svg.appendChild(mk('path',{id:'arcoRaz', d:arco(A0,meio,R), fill:'none', stroke:'#0E6474', 'stroke-width':2, 'stroke-linecap':'round'}));
+  svg.appendChild(mk('path',{id:'arcoEmo', d:arco(meio,A1,R), fill:'none', stroke:'#E8503A', 'stroke-width':2, 'stroke-linecap':'round'}));
+
+  /* traços */
+  for(var i=0;i<N;i++){
+    var t = i/(N-1);
+    var ang = A0 + (A1-A0)*t;
+    var maior = (i % 5 === 0);
+    var a = pol(ang, R - 2);
+    var b = pol(ang, R - (maior ? 13 : 6));
+    svg.appendChild(mk('line',{x1:a[0].toFixed(1), y1:a[1].toFixed(1), x2:b[0].toFixed(1), y2:b[1].toFixed(1),
+      stroke:'#102A43', 'stroke-opacity': maior ? .17 : .09, 'stroke-width': maior ? 1.6 : 1, 'stroke-linecap':'round'}));
+    if(maior){
+      var c = pol(ang, R - 29);
+      var n = mk('text',{x:c[0].toFixed(1), y:c[1].toFixed(1), fill:'#102A43', 'fill-opacity':.14,
+        'font-family':"'JetBrains Mono',monospace", 'font-size':10, 'text-anchor':'middle', 'dominant-baseline':'middle'});
+      n.textContent = (i/5*20) + '';
+      svg.appendChild(n);
+    }
+  }
+
+  /* unidade */
+  var u = mk('text',{x:cx, y:cy+176, fill:'#102A43', 'fill-opacity':.12,
+    'font-family':"'JetBrains Mono',monospace", 'font-size':9, 'letter-spacing':'3', 'text-anchor':'middle'});
+  u.textContent = 'KM × 1.000';
+  svg.appendChild(u);
+})();
+</script>
+</body>
+</html>
