@@ -1,6 +1,9 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Notecar — palco v3</title>
+<title>Notecar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Glory:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Playpen+Sans:wght@500;700&display=swap" rel="stylesheet">
@@ -313,7 +316,10 @@ body{
 #voltar:hover{opacity:1}
 #voltar svg{display:block;flex:0 0 auto}
 </style>
+<script src="analytics.js" defer></script>
+</head>
 
+<body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="hblur" x="-10%" y="-10%" width="120%" height="120%">
     <feGaussianBlur id="hblurNode" stdDeviation="0 0"/>
@@ -986,3 +992,5 @@ focusEl.textContent=fmt(BLOCKS[0].from);
 syncNav();
 addEventListener('resize',()=>placeTrack(currentKm));
 </script>
+</body>
+</html>

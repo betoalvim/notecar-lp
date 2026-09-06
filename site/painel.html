@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Notecar — painel</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Glory:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playpen+Sans:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   Notecar — painel do funil · mesma paleta da landing
+   ============================================================ */
+:root{
+  --navy:#102A43;
+  --teal-dk:#0E6474; --teal-md:#46B5BA;
+  --laranja:#E8503A; --laranja-dk:#C0402C;
+  --paper:#F1EFEA;
+  --ink2:#34434E; --ink3:#7B8894;
+  --linha:rgba(16,42,67,.11);
+  --d:'Glory',system-ui,-apple-system,sans-serif;
+  --m:'JetBrains Mono',ui-monospace,monospace;
+  --p:'Playpen Sans','Segoe Print',cursive;
+  --e:cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);color:var(--navy);font-family:var(--d);
+  -webkit-font-smoothing:antialiased;
+  padding:calc(env(safe-area-inset-top,0px) + 26px) 18px calc(env(safe-area-inset-bottom,0px) + 48px);
+}
+.folha{max-width:880px;margin:0 auto}
+.folha[hidden]{display:none}
+
+/* ── cabeçalho ── */
+.topo{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 14px}
+.marca{font-family:var(--p);font-weight:700;font-size:25px;color:var(--navy);letter-spacing:-.01em}
+.sub{font-size:14px;color:var(--ink3)}
+.periodo{margin-left:auto;display:flex;gap:4px;background:rgba(16,42,67,.05);padding:3px;border-radius:999px}
+.periodo button{
+  font:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink3);
+  border:0;background:transparent;padding:6px 13px;border-radius:999px;transition:all .25s var(--e);
+}
+.periodo button[aria-pressed="true"]{background:var(--paper);color:var(--navy);box-shadow:0 1px 3px rgba(16,42,67,.12)}
+
+.aviso{
+  margin-top:14px;padding:9px 14px;border-radius:10px;font-size:13px;
+  background:rgba(232,80,58,.09);color:var(--laranja-dk);border:1px solid rgba(232,80,58,.2);
+}
+.aviso[hidden]{display:none}
+
+/* ── cartões ── */
+.cartao{
+  background:rgba(255,255,255,.55);border:1px solid var(--linha);border-radius:16px;
+  padding:20px 20px 22px;margin-top:16px;
+}
+.cartao h2{
+  font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:16px;
+}
+
+/* ── números grandes ── */
+.numeros{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--linha);
+  border:1px solid var(--linha);border-radius:16px;overflow:hidden;margin-top:16px;
+}
+.numeros div{background:var(--paper);padding:16px 16px 18px}
+.numeros dt{font-size:12.5px;color:var(--ink3);margin-bottom:5px}
+.numeros dd{font-family:var(--m);font-weight:700;font-size:27px;line-height:1;letter-spacing:-.02em}
+
+/* ── mostrador ── */
+.medidor{display:flex;flex-direction:column}
+.medidor svg{width:min(78vw,300px);height:auto;overflow:visible;align-self:center}
+.medidor .rotulo{margin-top:-34px;text-align:center}
+.medidor .taxa{font-family:var(--m);font-weight:700;font-size:38px;letter-spacing:-.03em;color:var(--teal-dk)}
+.medidor .oque{font-size:13px;color:var(--ink3);margin-top:3px;max-width:30ch;margin-inline:auto}
+
+/* ── barras (funil e planos) ── */
+.degrau{margin-bottom:15px}
+.degrau:last-child{margin-bottom:0}
+.degrau .cabeca{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.degrau .nome{font-size:14.5px;font-weight:600}
+.degrau .qtd{font-family:var(--m);font-size:14px;font-weight:700;margin-left:auto}
+.degrau .pct{font-family:var(--m);font-size:12px;color:var(--ink3);min-width:46px;text-align:right}
+.trilho{height:9px;border-radius:999px;background:rgba(16,42,67,.07);overflow:hidden}
+.barra{height:100%;border-radius:999px;background:var(--teal-dk);width:0;transition:width .9s var(--e)}
+.degrau.intencao .barra{background:var(--laranja)}
+.fuga{font-size:12px;color:var(--ink3);margin-top:5px;line-height:1.35}
+
+/* ── duas trilhas ── */
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.trilha{border:1px solid var(--linha);border-radius:13px;padding:15px}
+.trilha .titulo{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px}
+.trilha.raz .titulo{color:var(--teal-dk)}
+.trilha.emo .titulo{color:var(--laranja-dk)}
+.trilha .grande{font-family:var(--m);font-weight:700;font-size:25px;letter-spacing:-.02em}
+.trilha .miudo{font-size:12.5px;color:var(--ink3);margin-top:4px;line-height:1.3}
+.nota{margin-top:14px;padding-top:14px;border-top:1px solid var(--linha);font-size:13.5px;color:var(--ink2);line-height:1.45}
+.nota b{font-family:var(--m);color:var(--navy)}
+
+/* ── porta ── */
+.porta{
+  position:fixed;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;
+  padding:24px;background:var(--paper);
+}
+.porta[hidden]{display:none}
+.porta form{width:100%;max-width:300px;text-align:center}
+.porta .marca{display:block;margin-bottom:6px}
+.porta p{font-size:13.5px;color:var(--ink3);margin-bottom:18px}
+.porta input{
+  width:100%;font:inherit;font-family:var(--m);font-size:15px;text-align:center;
+  padding:12px 14px;border-radius:11px;border:1px solid var(--linha);
+  background:rgba(255,255,255,.6);color:var(--navy);
+}
+.porta input:focus{outline:none;border-color:var(--teal-md)}
+.porta button{
+  width:100%;margin-top:10px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;
+  padding:12px;border-radius:11px;border:0;background:var(--navy);color:var(--paper);
+  transition:background .25s var(--e);
+}
+.porta button:hover{background:var(--teal-dk)}
+.porta .erro{margin-top:12px;font-size:13px;color:var(--laranja-dk)}
+.porta .erro[hidden]{display:none}
+
+@media (min-width:720px){
+  body{padding-top:40px}
+  .marca{font-size:30px}
+  .numeros{grid-template-columns:repeat(4,1fr)}
+  .numeros dd{font-size:31px}
+  .cartao{padding:24px 26px 26px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms !important}}
+</style>
+</head>
+
+<body>
+
+<!-- ══════════════ PORTA ══════════════ -->
+<div class="porta" id="porta" hidden>
+  <form id="formSenha">
+    <span class="marca">Notecar</span>
+    <p>Painel interno. Precisa da senha.</p>
+    <input type="password" id="campoSenha" autocomplete="current-password" placeholder="senha" required>
+    <button type="submit">Entrar</button>
+    <p class="erro" id="erroSenha" hidden>Senha não confere.</p>
+  </form>
+</div>
+
+<!-- ══════════════ PAINEL ══════════════ -->
+<main class="folha" id="folha" hidden>
+
+  <header class="topo">
+    <span class="marca">Notecar</span>
+    <span class="sub">funil da landing</span>
+    <div class="periodo" id="periodo" role="group" aria-label="Período">
+      <button type="button" data-dias="7"  aria-pressed="false">7d</button>
+      <button type="button" data-dias="30" aria-pressed="true">30d</button>
+      <button type="button" data-dias="90" aria-pressed="false">90d</button>
+    </div>
+  </header>
+
+  <p class="aviso" id="aviso" hidden></p>
+
+  <dl class="numeros">
+    <div><dt>Visitantes</dt><dd id="nVisitantes">—</dd></div>
+    <div><dt>Escolheram trilha</dt><dd id="nEscolheu">—</dd></div>
+    <div><dt>Chegaram nos planos</dt><dd id="nPlanos">—</dd></div>
+    <div><dt>Abriram checkout</dt><dd id="nCheckout">—</dd></div>
+  </dl>
+
+  <section class="cartao medidor">
+    <h2>Da porta ao checkout</h2>
+    <svg viewBox="0 0 400 230" id="mostrador" role="img" aria-label="Taxa de conversão"></svg>
+    <div class="rotulo">
+      <div class="taxa" id="taxa">—</div>
+      <div class="oque">de quem entra na landing chega a abrir o checkout</div>
+    </div>
+  </section>
+
+  <section class="cartao">
+    <h2>Degrau a degrau</h2>
+    <div id="funil"></div>
+  </section>
+
+  <section class="cartao">
+    <h2>Razão contra emoção</h2>
+    <div class="duas">
+      <div class="trilha raz">
+        <div class="titulo">Razão</div>
+        <div class="grande" id="tRazao">—</div>
+        <div class="miudo" id="tRazaoPct">—</div>
+      </div>
+      <div class="trilha emo">
+        <div class="titulo">Emoção</div>
+        <div class="grande" id="tEmocao">—</div>
+        <div class="miudo" id="tEmocaoPct">—</div>
+      </div>
+    </div>
+    <p class="nota" id="cruzou">—</p>
+  </section>
+
+  <section class="cartao">
+    <h2>Qual plano puxa o clique</h2>
+    <div id="planos"></div>
+    <p class="nota" id="ciclo">—</p>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var CHAVE = 'notecar-painel-senha';
+  var dias = 30;
+
+  /* Números de exemplo, só pra o painel ser legível antes do PostHog
+     existir. Some assim que a API responder de verdade. */
+  var EXEMPLO = {
+    visitantes: 1000, viu_landing: 1000, escolheu: 620, viu_razao: 372, viu_emocao: 289,
+    viu_ambos: 41, primeira_razao: 331, primeira_emocao: 289, viu_planos: 214,
+    usou_atalho: 37, abriu_checkout: 64, quis_plus: 38, quis_familia: 14, quis_free: 52,
+    quis_anual: 44, confirmou: 21
+  };
+
+  var porta = document.getElementById('porta');
+  var folha = document.getElementById('folha');
+  var aviso = document.getElementById('aviso');
+
+  var num = function (v) { return (v || 0).toLocaleString('pt-BR'); };
+  var pct = function (parte, todo) { return todo ? Math.round(parte / todo * 1000) / 10 : 0; };
+  var vg  = function (v) { return String(v).replace('.', ','); };
+
+  /* ── porta ── */
+  function senhaGuardada() {
+    try { return localStorage.getItem(CHAVE); } catch (e) { return null; }
+  }
+
+  function pedirSenha(errou) {
+    document.getElementById('erroSenha').hidden = !errou;
+    folha.hidden = true;
+    porta.hidden = false;
+    document.getElementById('campoSenha').focus();
+  }
+
+  document.getElementById('formSenha').addEventListener('submit', function (e) {
+    e.preventDefault();
+    try { localStorage.setItem(CHAVE, document.getElementById('campoSenha').value); } catch (err) {}
+    porta.hidden = true;
+    buscar();
+  });
+
+  /* ── busca ── */
+  function buscar() {
+    fetch('/api/funil?dias=' + dias, { headers: { 'x-painel-senha': senhaGuardada() || '' } })
+      .then(function (r) {
+        if (r.status === 401) {
+          try { localStorage.removeItem(CHAVE); } catch (e) {}
+          pedirSenha(true);
+          return null;
+        }
+        if (!r.ok) return r.json().then(function (j) { throw new Error(j.erro || r.status); });
+        return r.json();
+      })
+      .then(function (d) {
+        if (!d) return;
+        aviso.hidden = true;
+        desenhar(d.numeros);
+      })
+      .catch(function (e) {
+        aviso.textContent = 'Sem ligação com o PostHog (' + e.message + '). Os números abaixo são de exemplo.';
+        aviso.hidden = false;
+        desenhar(EXEMPLO);
+      });
+  }
+
+  /* ── mostrador: a régua da landing virando indicador ── */
+  function medidor(fracao) {
+    var svg = document.getElementById('mostrador');
+    var NS = 'http://www.w3.org/2000/svg';
+    var cx = 200, cy = 196, R = 150, A0 = 180, A1 = 0;
+    svg.textContent = '';
+
+    var mk = function (t, a) {
+      var e = document.createElementNS(NS, t);
+      for (var k in a) e.setAttribute(k, a[k]);
+      return e;
+    };
+    /* y invertido: no SVG o eixo cresce pra baixo */
+    var pol = function (ang, r) {
+      var a = ang * Math.PI / 180;
+      return [cx + Math.cos(a) * r, cy - Math.sin(a) * r];
+    };
+    var arco = function (de, ate, r) {
+      var p1 = pol(de, r), p2 = pol(ate, r);
+      return 'M' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) +
+             ' A' + r + ' ' + r + ' 0 0 1 ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+    };
+
+    svg.appendChild(mk('path', {
+      d: arco(A0, A1, R), fill: 'none', stroke: '#102A43',
+      'stroke-opacity': .12, 'stroke-width': 9, 'stroke-linecap': 'round'
+    }));
+
+    for (var i = 0; i <= 40; i++) {
+      var ang = A0 + (A1 - A0) * (i / 40);
+      var maior = (i % 5 === 0);
+      var a = pol(ang, R - 13), b = pol(ang, R - (maior ? 27 : 20));
+      svg.appendChild(mk('line', {
+        x1: a[0].toFixed(1), y1: a[1].toFixed(1), x2: b[0].toFixed(1), y2: b[1].toFixed(1),
+        stroke: '#102A43', 'stroke-opacity': maior ? .17 : .08,
+        'stroke-width': maior ? 1.6 : 1, 'stroke-linecap': 'round'
+      }));
+    }
+
+    var f = Math.max(0, Math.min(1, fracao || 0));
+    if (f > 0) {
+      svg.appendChild(mk('path', {
+        d: arco(A0, A0 + (A1 - A0) * f, R), fill: 'none',
+        stroke: '#0E6474', 'stroke-width': 9, 'stroke-linecap': 'round'
+      }));
+    }
+  }
+
+  /* ── funil ── */
+  function funil(n) {
+    var passos = [
+      ['Viram a landing',       n.viu_landing,    'A porta de entrada.'],
+      ['Escolheram uma trilha', n.escolheu,       'Clicaram em Razão ou Emoção.'],
+      ['Chegaram nos planos',   n.viu_planos,     'Somando quem veio pelo atalho.'],
+      ['Abriram o checkout',    n.abriu_checkout, 'Escolheram um plano pago e pediram pra assinar.'],
+      ['Confirmaram',           n.confirmou,      'Intenção, não compra — falta a integração de pagamento.']
+    ];
+    var topo = passos[0][1] || 1;
+    var alvo = document.getElementById('funil');
+    alvo.textContent = '';
+
+    passos.forEach(function (p, i) {
+      var largura = pct(p[1], topo);
+      var d = document.createElement('div');
+      d.className = 'degrau' + (i === passos.length - 1 ? ' intencao' : '');
+      d.innerHTML =
+        '<div class="cabeca"><span class="nome"></span>' +
+        '<span class="qtd"></span><span class="pct"></span></div>' +
+        '<div class="trilho"><div class="barra"></div></div>' +
+        '<div class="fuga"></div>';
+      d.querySelector('.nome').textContent = p[0];
+      d.querySelector('.qtd').textContent = num(p[1]);
+      d.querySelector('.pct').textContent = vg(largura) + '%';
+
+      var fuga = d.querySelector('.fuga');
+      if (i === 0) {
+        fuga.textContent = p[2];
+      } else {
+        var antes = passos[i - 1][1];
+        var perdeu = antes - p[1];
+        fuga.textContent = perdeu > 0
+          ? num(perdeu) + ' saíram aqui, ' + vg(pct(perdeu, antes)) + '% do degrau anterior. ' + p[2]
+          : p[2];
+      }
+
+      alvo.appendChild(d);
+      requestAnimationFrame(function () {
+        d.querySelector('.barra').style.width = largura + '%';
+      });
+    });
+  }
+
+  /* ── planos ── */
+  function planos(n) {
+    var itens = [
+      ['Começar grátis',  n.quis_free,    '#7B8894'],
+      ['Notecar Plus',    n.quis_plus,    '#0E6474'],
+      ['Notecar Família', n.quis_familia, '#E8503A']
+    ];
+    var maior = Math.max(1, n.quis_free, n.quis_plus, n.quis_familia);
+    var alvo = document.getElementById('planos');
+    alvo.textContent = '';
+
+    itens.forEach(function (it) {
+      var d = document.createElement('div');
+      d.className = 'degrau';
+      d.innerHTML =
+        '<div class="cabeca"><span class="nome"></span><span class="qtd"></span></div>' +
+        '<div class="trilho"><div class="barra"></div></div>';
+      d.querySelector('.nome').textContent = it[0];
+      d.querySelector('.qtd').textContent = num(it[1]);
+      var b = d.querySelector('.barra');
+      b.style.background = it[2];
+      alvo.appendChild(d);
+      requestAnimationFrame(function () { b.style.width = pct(it[1], maior) + '%'; });
+    });
+
+    var pagos = n.quis_plus + n.quis_familia;
+    document.getElementById('ciclo').innerHTML = pagos
+      ? '<b>' + vg(pct(n.quis_anual, pagos)) + '%</b> de quem escolheu um plano pago preferiu o anual.'
+      : 'Ninguém escolheu plano pago no período.';
+  }
+
+  /* ── pintura ── */
+  function desenhar(n) {
+    folha.hidden = false;
+
+    document.getElementById('nVisitantes').textContent = num(n.visitantes);
+    document.getElementById('nEscolheu').textContent   = num(n.escolheu);
+    document.getElementById('nPlanos').textContent     = num(n.viu_planos);
+    document.getElementById('nCheckout').textContent   = num(n.abriu_checkout);
+
+    document.getElementById('taxa').textContent = vg(pct(n.abriu_checkout, n.viu_landing)) + '%';
+    medidor(n.viu_landing ? n.abriu_checkout / n.viu_landing : 0);
+
+    funil(n);
+    planos(n);
+
+    /* primeira escolha é a pergunta que interessa: quem viu os dois
+       caminhos aparece nas duas contagens brutas e distorceria a leitura */
+    var pr = n.primeira_razao, pe = n.primeira_emocao, total = pr + pe;
+    document.getElementById('tRazao').textContent     = num(pr);
+    document.getElementById('tEmocao').textContent    = num(pe);
+    document.getElementById('tRazaoPct').textContent  = vg(pct(pr, total)) + '% das primeiras escolhas';
+    document.getElementById('tEmocaoPct').textContent = vg(pct(pe, total)) + '% das primeiras escolhas';
+
+    document.getElementById('cruzou').innerHTML =
+      '<b>' + num(n.viu_ambos) + '</b> voltaram para olhar a segunda trilha, ' +
+      vg(pct(n.viu_ambos, n.escolheu)) + '% de quem escolheu alguma. ' +
+      '<b>' + num(n.usou_atalho) + '</b> pularam direto para os planos pelo atalho.';
+  }
+
+  /* ── período ── */
+  document.getElementById('periodo').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    dias = parseInt(b.dataset.dias, 10);
+    Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) {
+      x.setAttribute('aria-pressed', String(x === b));
+    });
+    buscar();
+  });
+
+  if (senhaGuardada()) buscar(); else pedirSenha(false);
+})();
+</script>
+</body>
+</html>
