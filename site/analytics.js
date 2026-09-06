@@ -35,13 +35,16 @@
 
   var ativo = !!(window.posthog && window.posthog.capture);
 
-  /* Sem consentimento, persistência só em memória: nada é gravado no
-     navegador, e a pessoa não é reconhecida numa visita futura. Com o
-     "sim", passa a cookie — é isso que permite medir quem voltou dias
-     depois pra ver o segundo caminho. */
+  /* Antes do consentimento: sessionStorage. Some quando a aba fecha, não
+     é cookie e não reconhece ninguém numa visita futura — mas mantém o
+     mesmo ID durante a visita. Sem isso o funil não costura: 'memory'
+     troca de ID a cada página carregada, e o degrau 1 nunca encontra o 2.
+
+     Com o "sim": cookie, que é o que permite medir quem voltou dias depois
+     pra ver a segunda trilha. */
   if (ativo && window.posthog.set_config) {
     window.posthog.set_config({
-      persistence: consentiu() ? 'localStorage+cookie' : 'memory'
+      persistence: consentiu() ? 'localStorage+cookie' : 'sessionStorage'
     });
   }
 

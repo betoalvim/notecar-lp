@@ -70,9 +70,13 @@ ignorado pelo git.
 - **A consulta agrupa por `distinct_id`, não `person_id`.** O snippet usa
   `person_profiles:'identified_only'`, então visitante anônimo não ganha
   perfil de pessoa — `person_id` não serviria.
-- **Sem cookie até o "aceitar".** `persistence:'memory'` por padrão. Custo
-  aceito: sem cookie não dá pra reconhecer quem volta dias depois, que é
-  justamente o degrau "viu as duas trilhas".
+- **Sem cookie até o "aceitar".** `persistence:'sessionStorage'` por padrão,
+  cookie depois do sim. **Não usar `'memory'`**: foi a primeira tentativa e
+  quebrou o funil — memória não atravessa navegação, cada página gerava um
+  `distinct_id` novo e nenhum degrau costurava com o seguinte. Confirmado no
+  PostHog em 2026-09-06, uma visita apareceu como duas pessoas. Custo que
+  permanece: sem cookie não dá pra reconhecer quem volta dias depois, que é
+  o degrau "viu as duas trilhas".
 - **`/lp` no domínio do app foi descartado** em favor de subdomínio próprio.
 
 ## Pendências e dívida
