@@ -11,16 +11,18 @@ publica em produção sozinho.
 
 Três coisas abertas, em ordem de dependência:
 
-**1. Ligar o PostHog** (bloqueia o painel). Criar conta, escolher servidor na
-União Europeia, e colar o snippet do projeto no bloco marcado no topo de
-`site/analytics.js`. Depois, na Vercel → Settings → Environment Variables:
+**1. Variáveis de ambiente na Vercel** (bloqueia o painel). O snippet do
+PostHog já está em `site/analytics.js` desde 2026-09-06. Falta, em
+Settings → Environment Variables, marcando Production/Preview/Development:
 
 ```
-POSTHOG_HOST        https://eu.i.posthog.com
-POSTHOG_PROJECT_ID  (número do projeto, aparece na URL do painel deles)
-POSTHOG_API_KEY     Personal API key com leitura (phx_...)
-PAINEL_SENHA        senha do /painel
+POSTHOG_HOST        https://us.i.posthog.com
+POSTHOG_PROJECT_ID  (número na URL do painel do PostHog)
+POSTHOG_API_KEY     Personal API key com escopo query:read (phx_...)
+PAINEL_SENHA        senha do /painel, escolhida por você
 ```
+
+Variável só vale em deploy novo: depois de salvar, Deployments → Redeploy.
 
 Sem isso, `/painel` abre com **números de exemplo** e um aviso laranja no topo.
 
@@ -60,7 +62,14 @@ ignorado pelo git.
   `/painel`, lendo `/api/funil`. Descartado construir banco + coleta do zero:
   um dia de trabalho e cada pergunta nova viraria código novo.
 - **Chave de leitura do PostHog nunca vai pro navegador.** Fica em
-  `api/funil.js`, atrás da senha do painel.
+  `api/funil.js`, atrás da senha do painel. O token `phc_` do snippet é
+  público por natureza e fica no repositório sem problema.
+- **Projeto PostHog está na região EUA** (`us.i.posthog.com`), não na Europa.
+  Consciente: transferência internacional é permitida na LGPD desde que
+  declarada na política de privacidade. Trocar para a UE exige projeto novo.
+- **A consulta agrupa por `distinct_id`, não `person_id`.** O snippet usa
+  `person_profiles:'identified_only'`, então visitante anônimo não ganha
+  perfil de pessoa — `person_id` não serviria.
 - **Sem cookie até o "aceitar".** `persistence:'memory'` por padrão. Custo
   aceito: sem cookie não dá pra reconhecer quem volta dias depois, que é
   justamente o degrau "viu as duas trilhas".
@@ -84,6 +93,11 @@ ignorado pelo git.
   ter mudado alguma coisa.
 - **`api/funil.js` nunca rodou.** A consulta HogQL foi escrita no papel, sem
   PostHog pra testar. Espera-se ajuste na primeira execução real.
+- **Bloqueador de anúncio corta o PostHog.** uBlock, AdGuard e Brave bloqueiam
+  `i.posthog.com`. Custa 10-25% dos visitantes. Solução é servir o PostHog pelo
+  próprio domínio (reverse proxy) — trabalho separado, ainda não feito.
+- **Sem página de política de privacidade.** A barra de cookies deveria linkar
+  para uma, e a LGPD pede a menção à transferência internacional.
 - **Arraste no arco do mostrador nunca foi testado em tela sensível.**
 - `emocao.html` tem ~1 MB. Peso não auditado; provável imagem em base64.
 - `teste-stage.html` (25 bytes) versionado por engano na raiz. Lixo.

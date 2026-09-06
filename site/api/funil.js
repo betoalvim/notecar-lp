@@ -31,7 +31,7 @@ SELECT
   countIf(confirmou)                        AS confirmou
 FROM (
   SELECT
-    person_id,
+    distinct_id,
     max(event = '$pageview' AND properties.$pathname IN ('/', '/index.html'))         AS landing,
     max(event = '$pageview' AND properties.$pathname IN ('/razao', '/razao.html'))    AS razao,
     max(event = '$pageview' AND properties.$pathname IN ('/emocao', '/emocao.html'))  AS emocao,
@@ -46,7 +46,10 @@ FROM (
     argMinIf(properties.caminho, timestamp, event = 'escolheu_caminho')               AS primeira
   FROM events
   WHERE timestamp > now() - INTERVAL ${dias} DAY
-  GROUP BY person_id
+  /* distinct_id, nao person_id: o snippet usa person_profiles
+     'identified_only', entao visitante anonimo nao ganha perfil de
+     pessoa. distinct_id existe em todo evento nos dois modos. */
+  GROUP BY distinct_id
 )`;
 
 module.exports = async function (req, res) {
