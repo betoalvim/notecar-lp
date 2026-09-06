@@ -17,7 +17,7 @@ Settings → Environment Variables, marcando Production/Preview/Development:
 
 ```
 POSTHOG_HOST        https://us.i.posthog.com
-POSTHOG_PROJECT_ID  (número na URL do painel do PostHog)
+POSTHOG_PROJECT_ID  596954
 POSTHOG_API_KEY     Personal API key com escopo query:read (phx_...)
 PAINEL_SENHA        senha do /painel, escolhida por você
 ```
