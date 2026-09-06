@@ -14,21 +14,25 @@
 const CONSULTA = (dias) => `
 SELECT
   count()                                   AS visitantes,
+  /* Cada degrau exige os anteriores. Sem isso os degraus contam
+     pessoas diferentes e a porcentagem passa de 100%.
+     ponytail: quem entra direto numa trilha (anúncio apontando pra
+     /razao) nunca entra neste funil. Rever quando houver tráfego pago. */
   countIf(landing)                          AS viu_landing,
-  countIf(razao OR emocao)                  AS escolheu,
+  countIf(landing AND (razao OR emocao))    AS escolheu,
   countIf(razao)                            AS viu_razao,
   countIf(emocao)                           AS viu_emocao,
   countIf(razao AND emocao)                 AS viu_ambos,
   countIf(primeira = 'razao')               AS primeira_razao,
   countIf(primeira = 'emocao')              AS primeira_emocao,
-  countIf(planos)                           AS viu_planos,
+  countIf(landing AND (razao OR emocao) AND planos)                          AS viu_planos,
   countIf(atalho)                           AS usou_atalho,
-  countIf(checkout)                         AS abriu_checkout,
+  countIf(landing AND (razao OR emocao) AND planos AND checkout)             AS abriu_checkout,
   countIf(plus)                             AS quis_plus,
   countIf(familia)                          AS quis_familia,
   countIf(free)                             AS quis_free,
   countIf(anual)                            AS quis_anual,
-  countIf(confirmou)                        AS confirmou
+  countIf(landing AND (razao OR emocao) AND planos AND checkout AND confirmou) AS confirmou
 FROM (
   SELECT
     distinct_id,

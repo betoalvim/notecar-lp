@@ -11,28 +11,19 @@ publica em produção sozinho.
 
 Três coisas abertas, em ordem de dependência:
 
-**1. Variáveis de ambiente na Vercel** (bloqueia o painel). O snippet do
-PostHog já está em `site/analytics.js` desde 2026-09-06. Falta, em
-Settings → Environment Variables, marcando Production/Preview/Development:
+**O funil está no ar e funcionando.** Confirmado em 2026-09-06: a consulta
+HogQL rodou contra o PostHog real, o painel mostrou números verdadeiros em
+`notecar-lp.vercel.app/painel`. Variáveis de ambiente já configuradas na
+Vercel (`POSTHOG_HOST`, `POSTHOG_PROJECT_ID` = 596954, `POSTHOG_API_KEY`,
+`PAINEL_SENHA`), nas três environments.
 
-```
-POSTHOG_HOST        https://us.i.posthog.com
-POSTHOG_PROJECT_ID  596954
-POSTHOG_API_KEY     Personal API key com escopo query:read (phx_...)
-PAINEL_SENHA        senha do /painel, escolhida por você
-```
-
-Variável só vale em deploy novo: depois de salvar, Deployments → Redeploy.
-
-Sem isso, `/painel` abre com **números de exemplo** e um aviso laranja no topo.
-
-**2. Apontar o domínio `notecar.com.br`** (já registrado, 2026-09-06). Vercel →
+**1. Apontar o domínio `notecar.com.br`** (já registrado, 2026-09-06). Vercel →
 `notecar-lp` → Settings → Domains → adicionar `notecar.com.br` e
 `www.notecar.com.br`; copiar os registros que a Vercel mostrar e colar no
 Registro.br → DNS → Editar zona. Não precisa trocar nameserver.
 Decisão: `notecar.com.br` = landing, `app.notecar.com.br` = aplicativo.
 
-**3. Escrever os títulos e as meta tags das landings.** Ver dívida abaixo.
+**2. Escrever os títulos e as meta tags das landings.** Ver dívida abaixo.
 
 ## Pronto
 
@@ -95,8 +86,13 @@ ignorado pelo git.
   quirks mode. Corrigido em 2026-09-06, mas **o layout dela nunca foi conferido
   depois da correção**. Quirks mode muda `box-sizing` e altura de linha; pode
   ter mudado alguma coisa.
-- **`api/funil.js` nunca rodou.** A consulta HogQL foi escrita no papel, sem
-  PostHog pra testar. Espera-se ajuste na primeira execução real.
+- **Os dados de 2026-09-06 estão sujos.** São testes do próprio Beto, e parte
+  foi coletada antes do conserto do `persistence`, quando cada página gerava um
+  `distinct_id` novo. Ignorar os primeiros dias. Se incomodar, o PostHog tem
+  "Filter out internal and test users".
+- **Degraus do funil eram independentes**, então contavam pessoas diferentes e
+  a porcentagem podia passar de 100%. Corrigido em 2026-09-06: cada degrau
+  exige todos os anteriores.
 - **Bloqueador de anúncio corta o PostHog.** uBlock, AdGuard e Brave bloqueiam
   `i.posthog.com`. Custa 10-25% dos visitantes. Solução é servir o PostHog pelo
   próprio domínio (reverse proxy) — trabalho separado, ainda não feito.

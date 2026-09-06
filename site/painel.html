@@ -165,7 +165,7 @@ body{
   <p class="aviso" id="aviso" hidden></p>
 
   <dl class="numeros">
-    <div><dt>Visitantes</dt><dd id="nVisitantes">—</dd></div>
+    <div><dt>Viram a landing</dt><dd id="nVisitantes">—</dd></div>
     <div><dt>Escolheram trilha</dt><dd id="nEscolheu">—</dd></div>
     <div><dt>Chegaram nos planos</dt><dd id="nPlanos">—</dd></div>
     <div><dt>Abriram checkout</dt><dd id="nCheckout">—</dd></div>
@@ -404,7 +404,7 @@ body{
   function desenhar(n) {
     folha.hidden = false;
 
-    document.getElementById('nVisitantes').textContent = num(n.visitantes);
+    document.getElementById('nVisitantes').textContent = num(n.viu_landing);
     document.getElementById('nEscolheu').textContent   = num(n.escolheu);
     document.getElementById('nPlanos').textContent     = num(n.viu_planos);
     document.getElementById('nCheckout').textContent   = num(n.abriu_checkout);
