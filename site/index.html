@@ -69,13 +69,17 @@ body{
 
 /* ── as duas palavras ── */
 .escolha{
-  position:relative;margin-top:34px;margin-bottom:clamp(56px,15vw,84px);
+  --dial:min(76vw,292px);
+  position:relative;margin-top:34px;
+  /* a margem acompanha o mostrador: a tinta dele desce ate ~43,5% do raio da
+     caixa abaixo do centro. Sem isso o atalho cai em cima da regua. */
+  margin-bottom:calc(var(--dial) * .435);
   display:flex;align-items:center;justify-content:center;gap:clamp(11px,3.8vw,26px);
   animation:sobe 1s var(--e) .34s both;
 }
 .dial{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:min(84vw,320px);aspect-ratio:1/1;pointer-events:none;z-index:0;
+  width:var(--dial);aspect-ratio:1/1;pointer-events:none;z-index:0;
 }
 .dial svg{width:100%;height:100%;display:block;overflow:visible}
 
@@ -141,8 +145,7 @@ body{
   .l1{margin-top:38px;font-size:26px;max-width:24ch}
   .l2{font-size:38px;margin-top:9px}
   .l3{margin-top:24px;font-size:16.5px}
-  .escolha{margin-top:46px;margin-bottom:96px;gap:40px}
-  .dial{width:430px}
+  .escolha{--dial:392px;margin-top:46px;gap:40px}
   .p{font-size:42px;padding:14px 4px 16px}
   .risco{height:34px}
   .atalho{font-size:15px;padding:10px 19px}
