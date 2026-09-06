@@ -5,25 +5,25 @@ Site estático (sem build) com duas linhas criativas: **emoção** (polaroides) 
 
 ## Retomar por aqui
 
-Repo no ar: **https://github.com/betoalvim/notecar-lp** (branch `main`, commit
-inicial em 2026-09-04). Falta **importar na Vercel**. Caminho escolhido: opção C
-— projeto proprio, subdominio separado do app.
+Repo: **https://github.com/betoalvim/notecar-lp** (branch `main`). Projeto Vercel
+`notecar-lp` criado, domínio **notecar-lp.vercel.app**, Root Directory ajustado
+para `site` em 2026-09-06.
 
-No vercel.com/new, importando `betoalvim/notecar-lp`:
+Duas mudanças no `site/index.html`, publicadas em 2026-09-06:
 
-- Framework Preset: **Other**
-- **Root Directory: `site`**  ← o unico campo que nao e default
-- Build Command: vazio · Output Directory: `.`
-- Nome do projeto define o subdominio (`notecar-lp` -> `notecar-lp.vercel.app`)
+1. Botão **"Já conhece? Assinar agora"** abaixo do mostrador. Atalho direto pra
+   página de planos, pra quem volta à landing sem querer refazer a trilha.
+   Guarda em `localStorage` (`notecar-via`) por qual caminho a pessoa entrou e
+   manda pra versão combinando; sem memória, cai em `planos-razao.html`.
+2. **Arrastar o dedo no arco** do mostrador acende a palavra correspondente
+   (arco esquerdo = Razão, direito = Emoção) — o inverso do hover, que hoje faz
+   palavra acender arco. Faixa invisível de 46px sobre o arco captura o
+   pointer; o resto do `.dial` segue com `pointer-events:none` pros links
+   continuarem clicáveis. Classe `via-raz`/`via-emo` no `.escolha`, apaga 900ms
+   depois de soltar.
 
-As outras duas opcoes, se um dia o `/lp` no dominio do app virar exigencia:
-
-- **B** — `rewrites` no `vercel.json` do projeto do app (ou `next.config.js` se
-  for Next) apontando `/lp/:path*` para o deploy da landing. Antes disso,
-  **remover `cleanUrls: true` de `site/vercel.json`**: o redirect
-  `/emocao.html` -> `/emocao` atravessa o proxy e vaza o dominio de tras.
-- **A** — copiar `site/` para `public/lp/` do app. Cada ajuste de landing vira
-  redeploy do app.
+**Falta testar no celular de verdade** — o arraste no arco nunca foi tocado em
+tela sensível, só raciocinado. Push na `main` publica em produção sozinho.
 
 ## Pronto
 

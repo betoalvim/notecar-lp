@@ -108,6 +108,29 @@ body{
 .escolha:has(.emo:hover) #arcoEmo,
 .escolha:has(.emo:focus-visible) #arcoEmo{opacity:.55}
 
+/* ...e o inverso: arrastar o dedo no arco acende a palavra */
+.escolha.via-raz #arcoRaz,
+.escolha.via-emo #arcoEmo{opacity:.55}
+.escolha.via-raz .p.raz{color:var(--teal-dk)}
+.escolha.via-emo .p.emo{color:var(--laranja-dk)}
+.escolha.via-raz .p.raz::after,
+.escolha.via-emo .p.emo::after{width:100%}
+
+/* ── atalho pra quem ja conhece ── */
+.atalho{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--d);font-weight:500;font-size:14px;color:var(--ink3);
+  text-decoration:none;padding:9px 17px;border-radius:999px;
+  border:1px solid rgba(16,42,67,.13);background:transparent;
+  transition:color .3s var(--e),border-color .3s var(--e),background .3s var(--e);
+  animation:sobe 1s var(--e) .5s both;
+}
+.atalho b{font-weight:700;color:var(--navy)}
+.atalho:hover,.atalho:focus-visible{
+  color:var(--navy);border-color:rgba(16,42,67,.32);
+  background:rgba(255,255,255,.55);outline:none;
+}
+
 @keyframes sobe{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 .l2{animation-name:sobeGirado}
 @keyframes sobeGirado{from{opacity:0;transform:translateY(9px) rotate(-1.4deg)}to{opacity:1;transform:rotate(-1.4deg)}}
@@ -122,6 +145,7 @@ body{
   .dial{width:430px}
   .p{font-size:42px;padding:14px 4px 16px}
   .risco{height:34px}
+  .atalho{font-size:15px;padding:10px 19px}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -150,6 +174,8 @@ body{
     <span class="risco" aria-hidden="true"></span>
     <a class="p emo" href="emocao.html">Emoção</a>
   </nav>
+
+  <a class="atalho" id="atalho" href="planos-razao.html">Já conhece? <b>Assinar agora</b></a>
 
 </main>
 
@@ -203,6 +229,49 @@ body{
     'font-family':"'JetBrains Mono',monospace", 'font-size':9, 'letter-spacing':'3', 'text-anchor':'middle'});
   u.textContent = 'KM × 1.000';
   svg.appendChild(u);
+
+  /* ── arrastar o dedo no arco acende a palavra (o inverso do hover) ─────
+     Faixa invisível por cima do arco. O resto do .dial segue com
+     pointer-events:none, entao os links continuam clicáveis. */
+  var nav = document.querySelector('.escolha');
+  if(!nav) return;
+  var alvo = mk('path',{d:arco(A0,A1,R), fill:'none', stroke:'transparent',
+    'stroke-width':46, 'stroke-linecap':'round', 'pointer-events':'stroke',
+    style:'touch-action:none'});
+  svg.appendChild(alvo);
+
+  var apagar;
+  var marca = function(ev){
+    var r = svg.getBoundingClientRect();
+    /* meio do mostrador = meio da caixa; nao precisa de trigonometria */
+    var raz = (ev.clientX - r.left) < r.width/2;
+    nav.classList.toggle('via-raz', raz);
+    nav.classList.toggle('via-emo', !raz);
+    clearTimeout(apagar);
+  };
+  var solta = function(){
+    clearTimeout(apagar);
+    apagar = setTimeout(function(){ nav.classList.remove('via-raz','via-emo'); }, 900);
+  };
+  alvo.addEventListener('pointerdown', marca);
+  alvo.addEventListener('pointermove', marca);
+  alvo.addEventListener('pointerup', solta);
+  alvo.addEventListener('pointercancel', solta);
+  alvo.addEventListener('pointerleave', solta);
+})();
+
+/* ── atalho: lembra por qual trilha a pessoa entrou ── */
+(function(){
+  var atalho = document.getElementById('atalho');
+  if(!atalho) return;
+  try{
+    if(localStorage.getItem('notecar-via') === 'emo') atalho.href = 'planos-emocao.html';
+  }catch(e){}
+  Array.prototype.forEach.call(document.querySelectorAll('.p'), function(a){
+    a.addEventListener('click', function(){
+      try{ localStorage.setItem('notecar-via', a.classList.contains('emo') ? 'emo' : 'raz'); }catch(e){}
+    });
+  });
 })();
 </script>
 </body>
